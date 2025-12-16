@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solutions IA - TEDSAI Complex</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Page Specific Styles inline for speed/MVP, ideally move to style.css */
+        /* Page Specific Styles inline for speed/MVP, ideally move to style.css */
+        .hero-ia {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-text-dark) 100%);
+            height: 60vh;
+            min-height: 500px;
+        }
+
+        .tabs-container {
+            margin-top: var(--space-xl);
+        }
+
+        .tabs-header {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-lg);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--color-white);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-card);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-lg);
+        }
+
+        .pricing-card {
+            background: var(--color-white);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid #eee;
+            text-align: center;
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border: 2px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: var(--space-md) 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <div class="container navbar">
+            <a href="../index.html" class="logo">
+                <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="TEDSAI Logo">
+            </a>
+            <nav class="nav-links">
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span data-i18n="nav.home">Home</span></a>
+                <a href="solutions-ia.html" style="color: var(--color-primary);" data-i18n="nav.solutions">AI
+                    Solutions</a>
+                <a href="vitedia.html" data-i18n="nav.vitedia">viTEDia</a>
+                <a href="garden.html" data-i18n="nav.garden">SelecTED Gardens</a>
+                <a href="observatoire.html" data-i18n="nav.observatory">Observatory</a>
+                <button id="lang-toggle-btn" onclick="toggleLanguage()"
+                    style="background-color: #2196F3 !important; color: white !important; border: 2px solid #1976D2; padding: 8px 16px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-language"></i> EN
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero hero-ia">
+        <div class="hero-content container fade-in-up">
+            <h1 data-i18n="solutions.hero.title">Le Cerveau du Complexe</h1>
+            <p data-i18n="solutions.hero.subtitle">Intelligence Artificielle pour PME & Optimisation Interne</p>
+        </div>
+    </section>
+
+    <!-- Intro / Vision Section -->
+    <section class="container" style="padding: 4rem 0; text-align: center;">
+        <h2 style="color: var(--color-primary); margin-bottom: 2rem;" data-i18n="solutions.mission.title">Notre Double
+            Mission</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 900px; margin: 0 auto;">
+            <div style="text-align: left;">
+                <h3 style="color: var(--color-secondary);"><i class="fa-solid fa-network-wired"></i> <span
+                        data-i18n="solutions.mission.internal.title">Interne</span></h3>
+                <p data-i18n="solutions.mission.internal.desc">TEDSAI IA pilote l'ensemble du complexe. Gestion des
+                    stocks du restaurant, régulation de l'irrigation
+                    du jardin, et analyse des flux en temps réel.</p>
+            </div>
+            <div style="text-align: left;">
+                <h3 style="color: var(--color-secondary);"><i class="fa-solid fa-briefcase"></i> <span
+                        data-i18n="solutions.mission.external.title">Externe</span></h3>
+                <p data-i18n="solutions.mission.external.desc">Nous mettons cette même puissance technologique au
+                    service des PME locales pour automatiser,
+                    sécuriser et accélérer leur croissance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Tabs -->
+    <section class="container tabs-container">
+        <h2 style="text-align: center; margin-bottom: var(--space-md);">Vos Défis, Nos Solutions</h2>
+
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="openTab(event, 'facturation')" data-i18n="solutions.tabs.billing">🧾
+                Facturation</button>
+            <button class="tab-btn" onclick="openTab(event, 'stocks')" data-i18n="solutions.tabs.stocks">📦
+                Stocks</button>
+            <button class="tab-btn" onclick="openTab(event, 'service')" data-i18n="solutions.tabs.service">💬 Service
+                Client</button>
+        </div>
+
+        <div id="facturation" class="tab-content active">
+            <div style="display: flex; gap: var(--space-lg); flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 data-i18n="solutions.billing.title">Automatisation de la Facturation</h3>
+                    <p style="margin-top: 1rem;" data-i18n="solutions.billing.desc">Vos équipes passent 15h/semaine à
+                        saisir des factures manuellement ?
+                        L'IA TEDSAI scanne, extrait et intègre automatiquement vos factures dans votre ERP.</p>
+                    <ul style="margin-top: 1rem; list-style: circle; padding-left: 1.5rem;">
+                        <li data-i18n="solutions.billing.feat1">Reconnaissance OCR 99.8%</li>
+                        <li data-i18n="solutions.billing.feat2">Intégration Sage, QuickBooks, Odoo</li>
+                        <li data-i18n="solutions.billing.feat3">Détection des erreurs et doublons</li>
+                    </ul>
+                </div>
+                <div
+                    style="flex: 1; min-width: 300px; background: #f0f4f8; padding: var(--space-md); border-radius: 8px;">
+                    <h4 data-i18n="solutions.billing.results_title">Résultats Client</h4>
+                    <p><strong data-i18n="solutions.billing.client">Supermarché Local :</strong></p>
+                    <p class="stats" style="color: var(--color-secondary);"><span
+                            data-i18n="solutions.billing.roi_label">ROI :</span> <span
+                            data-i18n="solutions.billing.roi_val">8 500€ économisés/an</span></p>
+                    <p data-i18n="solutions.billing.time_saved">Temps de gestion divisé par 8.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="stocks" class="tab-content">
+            <h3 data-i18n="solutions.stocks.title">Gestion Intelligente des Stocks</h3>
+            <p data-i18n="solutions.stocks.desc">Anticipez la demande et réduisez le gaspillage grâce à nos algorithmes
+                prédictifs.</p>
+        </div>
+
+        <div id="service" class="tab-content">
+            <h3 data-i18n="solutions.service.title">Service Client 360°</h3>
+            <p data-i18n="solutions.service.desc">Chatbots intelligents disponibles 24/7 pour répondre à vos clients
+                instantanément.</p>
+        </div>
+    </section>
+
+    <!-- AI Playground Placeholder -->
+    <section id="playground"
+        style="background: #eef2f6; padding: var(--space-xl) 0; margin-top: var(--space-xl); text-align: center;">
+        <div class="container">
+            <h2 data-i18n="solutions.playground.title">IA Playground</h2>
+            <p data-i18n="solutions.playground.desc">Testez notre technologie OCR en temps réel (Simulation).</p>
+            <div
+                style="background: white; width: 100%; max-width: 600px; height: 300px; margin: 2rem auto; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                <p style="color: #888;"><i class="fa-solid fa-cloud-upload-alt fa-2x"></i><br><span
+                        data-i18n="solutions.playground.drop">Glissez une facture ici
+                        (Démo)</span></p>
+            </div>
+            <button class="btn btn-primary" data-i18n="solutions.playground.btn">Lancer l'analyse</button>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="container" style="padding: 4rem 0;">
+        <h2 style="text-align: center; margin-bottom: 3rem; color: var(--color-primary);">Nos Solutions</h2>
+
+        <!-- Dynamic Content -->
+        <div id="dynamic-services-container">
+            <p style="text-align: center; color: #777;"><span data-i18n="solutions.loading">Chargement des services
+                    IA...</span> <i class="fa-solid fa-spinner fa-spin"></i></p>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="container" style="margin-bottom: var(--space-xl);">
+        <h2 style="text-align: center; margin-top: var(--space-xl);" data-i18n="solutions.estimate.title">Estimez votre
+            Projet</h2>
+        <p style="text-align: center; margin-bottom: 2rem;" data-i18n="solutions.estimate.desc">Utilisez notre assistant
+            pour obtenir une estimation
+            immédiate.</p>
+
+        <div id="quote-wizard-container"
+            style="max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <div id="wizard-steps">
+                <!-- Dynamic Steps -->
+                <p style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> <span
+                        data-i18n="solutions.loading">Chargement...</span></p>
+            </div>
+            <div id="wizard-result" style="display: none; text-align: center;">
+                <i class="fa-solid fa-check-circle fa-3x" style="color: var(--color-active);"></i>
+                <h3 style="margin: 1rem 0;" data-i18n="solutions.estimate.result_title">Estimation Initiale</h3>
+                <p style="font-size: 2rem; font-weight: bold; color: var(--color-primary);" id="estimated-price">0€</p>
+                <p style="color: #666; margin-bottom: 1.5rem;" data-i18n="solutions.estimate.disclaimer">Ceci est une
+                    estimation brute. Contactez-nous pour
+                    affiner.</p>
+                <a href="contact.html" class="btn btn-primary" data-i18n="solutions.estimate.book">Prendre RDV</a>
+                <button class="btn btn-secondary" onclick="restartWizard()"
+                    data-i18n="solutions.estimate.restart">Recommencer</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section (Lead Magnets) -->
+    <section class="container" style="padding: 4rem 0; background: #f9f9f9; border-radius: 12px;">
+        <h2 style="text-align: center; margin-bottom: 2rem;" data-i18n="solutions.resources.title">Ressources Utiles
+        </h2>
+        <div class="prod-grid">
+            <div class="prod-card">
+                <i class="fa-solid fa-file-pdf prod-icon" style="color: #e74c3c;"></i>
+                <h3 data-i18n="solutions.resources.whitepaper.title">Livre Blanc IA & PME</h3>
+                <p data-i18n="solutions.resources.whitepaper.desc">Guide complet pour digitaliser votre entreprise au
+                    Cameroun.</p>
+                <button class="btn-text" onclick="downloadResource('whitepaper')"
+                    data-i18n="solutions.resources.download_pdf">Télécharger (PDF)</button>
+            </div>
+            <div class="prod-card">
+                <i class="fa-solid fa-file-excel prod-icon" style="color: #27ae60;"></i>
+                <h3 data-i18n="solutions.resources.roi.title">Calculateur ROI</h3>
+                <p data-i18n="solutions.resources.roi.desc">Fichier Excel pour calculer la rentabilité de
+                    l'automatisation.</p>
+                <button class="btn-text" onclick="downloadResource('roi')"
+                    data-i18n="solutions.resources.download_xls">Télécharger (XLS)</button>
+            </div>
+        </div>
+    </section>
+    <div class="pricing-card">
+        <h3>Starter</h3>
+        <div class="price">499€<span style="font-size: 1rem; color: #666;"
+                data-i18n="solutions.pricing.month">/mois</span></div>
+        <p data-i18n="solutions.pricing.small">Pour PME 1-10 employés</p>
+        <a href="#" class="btn btn-secondary" style="margin-top: var(--space-md);"
+            data-i18n="solutions.pricing.choose">Choisir</a>
+    </div>
+    <div class="pricing-card featured">
+        <div style="background: var(--color-secondary); color: white; position: absolute; top: 0; left: 0; width: 100%; padding: 4px; font-size: 0.8rem; font-weight: bold;"
+            data-i18n="solutions.pricing.popular">
+            POPULAIRE</div>
+        <h3 style="margin-top: var(--space-am);">Business</h3>
+        <div class="price">1 299€<span style="font-size: 1rem; color: #666;"
+                data-i18n="solutions.pricing.month">/mois</span></div>
+        <p data-i18n="solutions.pricing.medium">Pour PME 10-50 employés</p>
+        <a href="#" class="btn btn-primary" style="margin-top: var(--space-md);"
+            data-i18n="solutions.pricing.choose">Choisir</a>
+    </div>
+    <div class="pricing-card">
+        <h3>Enterprise</h3>
+        <div class="price" data-i18n="solutions.pricing.quote">Sur Devis</div>
+        <p data-i18n="solutions.pricing.large">Pour +50 employés</p>
+        <a href="contact.html" class="btn btn-secondary" style="margin-top: var(--space-md);"
+            data-i18n="solutions.pricing.contact">Contacter</a>
+    </div>
+    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h4 style="color: white; border-bottom: 2px solid var(--color-secondary); padding-bottom: 8px;"
+                    data-i18n="solutions.footer.title">TEDSAI
+                    Solutions</h4>
+                <p data-i18n="solutions.footer.desc">L'intelligence artificielle au service du réel.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Liens Rapides</h4>
+                <ul>
+                    <li><a href="../index.html">Accueil</a></li>
+                    <li><a href="contact.html">Demander un Audit</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+    </script>
+    <script src="../assets/js/lang-toggle.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEDSAI Admin - Connexion</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header img {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background: var(--color-secondary);
+        }
+
+        .error-msg {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="TEDSAI Logo">
+            <h2>Accès Sécurisé</h2>
+            <p style="color: #666; font-size: 0.9rem;">Portail d'Administration Unifié</p>
+        </div>
+        <div id="error-alert" class="error-msg">Identifiants incorrects.</div>
+        <form id="login-form">
+            <div class="form-group">
+                <label>Identifiant</label>
+                <input type="text" id="username" class="form-control" placeholder="ex: admin" required>
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-login"><i class="fa-solid fa-lock"></i> Se Connecter</button>
+        </form>
+        <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #999;">
+            <i class="fa-solid fa-shield-halved"></i> Connexion chiffrée (Simulation)
+        </p>
+    </div>
+
+    <script src="../assets/js/data-loader.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const result = await tedApi.login(username, password);
+            if (result.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                const errorAlert = document.getElementById('error-alert');
+                errorAlert.style.display = 'block';
+                errorAlert.textContent = result.message;
+            }
+        });
+    </script>
+</body>
+
+</html>

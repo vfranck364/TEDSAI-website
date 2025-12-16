@@ -1,0 +1,178 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "solutions": "Solutions IA",
+    "vitedia": "viTEDia",
+    "garden": "SelecTED Gardens",
+    "observatory": "Observatoire",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "De la Data à l'Assiette",
+    "subtitle": "Un écosystème intelligent unifiant Intelligence Artificielle, Gastronomie Durable et Agriculture Urbaine",
+    "discover_cta": "Découvrir",
+    "vitedia_cta": "viTEDia"
+  },
+  "pillars": {
+    "ia": {
+      "title": "Solutions IA Sur Mesure",
+      "desc": "Automatisez vos processus, optimisez vos stocks, propulsez votre service client avec l'intelligence artificielle pragmatique.",
+      "stats": "250+ heures économisées/mois",
+      "cta": "Explorer"
+    },
+    "gastronomy": {
+      "title": "Gastronomie Traçable",
+      "desc": "Une cuisine raffinée où chaque ingrédient raconte son histoire, de notre jardin à votre assiette.",
+      "stats": "95% des produits du jardin",
+      "cta": "Voir le menu"
+    },
+    "agriculture": {
+      "title": "Agriculture Urbaine",
+      "desc": "Un jardin productif au cœur de la ville, utilisant l'IoT et l'IA pour une traçabilité totale.",
+      "stats": "Zéro pesticide, 100% traçable",
+      "cta": "Découvrir le jardin"
+    }
+  },
+  "ecosystem": {
+    "title": "Une Vision Unifiée",
+    "subtitle": "L'IA ne dort jamais. Elle pilote, optimise et relie chaque compartiment.",
+    "nodes": {
+      "ia": "IA & Data",
+      "ia_tooltip": "Analyse & Optimisation",
+      "garden": "Jardin Urbain",
+      "garden_tooltip": "Production Traçable",
+      "rest": "Restaurant",
+      "rest_tooltip": "Expérience Gastronomique",
+      "spice": "Épices",
+      "soon": "Bientôt"
+    },
+    "flow": {
+      "data": "Données",
+      "products": "Produits Frais",
+      "compost": "Compost"
+    },
+    "cta": "Comprendre notre vision"
+  },
+  "solutions": {
+    "loading": "Chargement...",
+    "hero": {
+      "title": "Le Cerveau du Complexe",
+      "subtitle": "Intelligence Artificielle pour PME & Optimisation Interne"
+    },
+    "mission": {
+      "title": "Notre Double Mission",
+      "internal": {
+        "title": "Interne",
+        "desc": "TEDSAI IA pilote l'ensemble du complexe. Gestion des stocks du restaurant, régulation de l'irrigation du jardin, et analyse des flux en temps réel."
+      },
+      "external": {
+        "title": "Externe",
+        "desc": "Nous mettons cette même puissance technologique au service des PME locales pour automatiser, sécuriser et accélérer leur croissance."
+      }
+    },
+    "tabs": {
+      "billing": "🧾 Facturation",
+      "stocks": "📦 Stocks",
+      "service": "💬 Service Client"
+    },
+    "billing": {
+      "title": "Automatisation de la Facturation",
+      "desc": "Vos équipes passent 15h/semaine à saisir des factures manuellement ? L'IA TEDSAI scanne, extrait et intègre automatiquement vos factures dans votre ERP.",
+      "feat1": "Reconnaissance OCR 99.8%",
+      "feat2": "Intégration Sage, QuickBooks, Odoo",
+      "feat3": "Détection des erreurs et doublons",
+      "results_title": "Résultats Client",
+      "client": "Supermarché Local :",
+      "roi_label": "ROI :",
+      "roi_val": "8 500€ économisés/an",
+      "time_saved": "Temps de gestion divisé par 8."
+    },
+    "stocks": {
+      "title": "Gestion Intelligente des Stocks",
+      "desc": "Anticipez la demande et réduisez le gaspillage grâce à nos algorithmes prédictifs."
+    },
+    "service": {
+      "title": "Service Client 360°",
+      "desc": "Chatbots intelligents disponibles 24/7 pour répondre à vos clients instantanément."
+    },
+    "playground": {
+      "title": "IA Playground",
+      "desc": "Testez notre technologie OCR en temps réel (Simulation).",
+      "drop": "Glissez une facture ici (Démo)",
+      "btn": "Lancer l'analyse"
+    },
+    "estimate": {
+      "title": "Estimez votre Projet",
+      "desc": "Utilisez notre assistant pour obtenir une estimation immédiate.",
+      "result_title": "Estimation Initiale",
+      "disclaimer": "Ceci est une estimation brute. Contactez-nous pour affiner.",
+      "book": "Prendre RDV",
+      "restart": "Recommencer"
+    },
+    "resources": {
+      "title": "Ressources Utiles",
+      "whitepaper": {
+        "title": "Livre Blanc IA & PME",
+        "desc": "Guide complet pour digitaliser votre entreprise au Cameroun."
+      },
+      "roi": {
+        "title": "Calculateur ROI",
+        "desc": "Fichier Excel pour calculer la rentabilité de l'automatisation."
+      },
+      "download_pdf": "Télécharger (PDF)",
+      "download_xls": "Télécharger (XLS)"
+    },
+    "pricing": {
+      "month": "/mois",
+      "small": "Pour PME 1-10 employés",
+      "medium": "Pour PME 10-50 employés",
+      "large": "Pour +50 employés",
+      "choose": "Choisir",
+      "contact": "Contacter",
+      "quote": "Sur Devis",
+      "popular": "POPULAIRE"
+    },
+    "footer": {
+      "title": "TEDSAI Solutions",
+      "desc": "L'intelligence artificielle au service du réel."
+    }
+  },
+  "vitedia": {
+    "hero": {
+      "title": "Bon. Propre. Rapide.",
+      "subtitle": "Le goût de l'excellence, la traçabilité en plus.",
+      "cta": "Réserver une table"
+    },
+    "concept": {
+      "title": "Une Odyssée Culinaire",
+      "desc": "viTEDia célèbre la diversité des <strong>dix régions du Cameroun</strong>. Nos chefs revisitent les classiques avec une touche moderne, en utilisant exclusivement des produits de notre jardin urbain. C'est la rencontre entre la tradition ancestrale et l'innovation de TEDSAI."
+    },
+    "menu": {
+      "title": "Menu du Jour"
+    },
+    "reservation": {
+      "title": "Réserver une Table",
+      "name": "Nom Complet",
+      "name_placeholder": "Votre nom",
+      "date": "Date",
+      "time": "Heure",
+      "guests": "Nombre de Personnes",
+      "submit": "Confirmer la Réservation"
+    },
+    "footer": {
+      "title": "viTEDia",
+      "desc": "Gastronomie Durable à Yaoundé.",
+      "powered_by": "Logistique propulsée par",
+      "copyright": "© 2024 viTEDia Restaurant. Une entité du TEDSAI Complex."
+    }
+  },
+  "footer": {
+    "tagline": "Le système nerveux numérique d'un écosystème intelligent.",
+    "links": {
+      "contact": "Nous Contacter",
+      "recruitment": "Recrutement",
+      "press": "Presse"
+    },
+    "copyright": "© 2024 TEDSAI Complex. Tous droits réservés."
+  }
+}

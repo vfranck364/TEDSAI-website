@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEDSAI Admin - Dashboard</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #0A2463;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header img {
+            height: 40px;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .menu-link {
+            display: block;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-link:hover,
+        .menu-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--color-secondary);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        /* Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* Forms */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .status-active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-inactive {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="Logo">
+            <p id="user-role-display" style="font-size: 0.8rem; opacity: 0.7; margin-top: 5px;">Chargement...</p>
+        </div>
+        <nav class="sidebar-menu">
+            <a class="menu-link active" onclick="showSection('overview')"><i class="fa-solid fa-gauge"></i> Vue
+                d'ensemble</a>
+            <a class="menu-link" id="nav-vitedia" onclick="showSection('vitedia')"><i class="fa-solid fa-utensils"></i>
+                viTEDia</a>
+            <a class="menu-link" id="nav-garden" onclick="showSection('garden')"><i class="fa-solid fa-leaf"></i>
+                Garden</a>
+            <a class="menu-link" id="nav-ia" onclick="showSection('ia')"><i class="fa-solid fa-robot"></i> Services
+                IA</a>
+            <a class="menu-link" id="nav-users" onclick="showSection('users')"><i class="fa-solid fa-users"></i>
+                Utilisateurs</a>
+        </nav>
+        <div class="sidebar-footer">
+            <a onclick="tedApi.logout()" style="color: #ff8a80; cursor: pointer;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Déconnexion</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h2 id="page-title">Vue d'ensemble</h2>
+            <div class="user-profile">
+                <span id="user-name-display">Utilisateur</span> <i class="fa-solid fa-circle-user fa-lg"></i>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="section-overview" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Visiteurs (24h)</h3>
+                    <div class="value">1,245</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Réservations</h3>
+                    <div class="value">34</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Commandes IA</h3>
+                    <div class="value">12</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Production (Kg)</h3>
+                    <div class="value">85</div>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px;">
+                <h3><i class="fa-solid fa-bell"></i> Activité Récente</h3>
+                <ul id="activity-log" style="list-style: none; padding: 0; margin-top: 15px;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <span class="status-badge status-active">New</span> Commande #1234 - Velouté Potimarron
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <span class="status-badge status-active">Support</span> Ticket IA: "Problème intégration API"
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- viTEDia Admin Section -->
+        <div id="section-vitedia" class="content-section">
+            <h3>Gestion du Menu</h3>
+            <p>Modifiez les prix et la disponibilité en temps réel.</p>
+            <br>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Plat</th>
+                        <th>Prix</th>
+                        <th>Disponibilité</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="menu-table-body">
+                    <!-- Dynamic Data -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Garden Admin Section -->
+        <div id="section-garden" class="content-section">
+            <h3>Gestion de la Production</h3>
+            <p>Moniteur IoT en temps réel.</p>
+            <br>
+            <div id="garden-admin-container"></div>
+        </div>
+
+        <!-- Users Admin Section -->
+        <div id="section-users" class="content-section">
+            <h3>Utilisateurs & Rôles</h3>
+            <br>
+            <div id="users-admin-container"></div>
+        </div>
+
+        <!-- Restricted Section Access Denied -->
+        <div id="section-denied" class="content-section">
+            <div style="padding: 50px; text-align: center; color: #c62828;">
+                <i class="fa-solid fa-triangle-exclamation fa-4x"></i>
+                <h2>Accès Refusé</h2>
+                <p>Vous n'avez pas les permissions pour accéder à ce module.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../assets/js/data-loader.js"></script>
+    <script>
+        // Check Auth
+        const user = tedApi.getCurrentUser();
+        if (!user) {
+            window.location.href = 'login.html';
+        }
+
+        // Initialize UI
+        document.getElementById('user-name-display').textContent = user.name;
+        document.getElementById('user-role-display').textContent = `Rôle: ${user.role}`;
+
+        // RBAC Logic
+        const rolePermissions = {
+            'super_admin': ['vitedia', 'garden', 'ia', 'users'],
+            'manager_vitedia': ['vitedia'],
+            'manager_garden': ['garden'],
+            'manager_ia': ['ia']
+        };
+
+        const allowedSections = rolePermissions[user.role] || [];
+
+        // Hide links based on role
+        ['vitedia', 'garden', 'ia', 'users'].forEach(section => {
+            if (!allowedSections.includes(section) && user.role !== 'super_admin') {
+                const link = document.getElementById(`nav-${section}`);
+                if (link) link.style.display = 'none';
+            }
+        });
+
+        // Navigation Logic
+        function showSection(sectionId) {
+            document.getElementById('page-title').textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+
+            if (sectionId !== 'overview' && !allowedSections.includes(sectionId) && user.role !== 'super_admin') {
+                sectionId = 'denied';
+            }
+
+            document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+            const activeLink = document.getElementById(`nav-${sectionId}`);
+            if (activeLink) activeLink.classList.add('active');
+
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const targetSection = document.getElementById(`section-${sectionId}`) || document.getElementById('section-overview');
+            targetSection.classList.add('active');
+
+            // Load Data Specifics
+            if (sectionId === 'overview') loadOverview();
+            if (sectionId === 'vitedia') loadMenuEditor();
+            if (sectionId === 'garden') loadGardenEditor();
+            if (sectionId === 'users') loadUsers();
+        }
+
+        // --- OVERVIEW: Real Activity Log ---
+        async function loadOverview() {
+            // Load messages from "Database"
+            const messages = JSON.parse(localStorage.getItem('tedsai_messages') || '[]');
+            const list = document.getElementById('activity-log');
+
+            if (messages.length === 0) {
+                list.innerHTML = '<li style="padding:10px;">Aucune activité récente.</li>';
+                return;
+            }
+
+            let html = '';
+            // Show last 5
+            messages.slice(0, 5).forEach(msg => {
+                const typeLabel = msg.interest === 'ia' ? 'IA Request' : (msg.interest === 'resto' ? 'Réservation' : 'Contact');
+                const badgeClass = msg.interest === 'ia' ? 'status-active' : 'status-inactive';
+
+                html += `
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <span class="status-badge ${badgeClass}">${typeLabel}</span> 
+                        <strong>${msg.name}</strong> - ${msg.email} <br>
+                        <span style="font-size:0.8rem; color:#888;">${new Date(msg.date).toLocaleString()}</span>
+                    </li>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        // --- LIMITED EDITORS: Real Data Handlers ---
+
+        // 1. MENU EDITOR (Professional CRUD with Images & Tags)
+        async function loadMenuEditor() {
+            const data = await tedApi.fetchData('menu');
+            const tbody = document.getElementById('menu-table-body');
+            let html = '';
+
+            const categories = {
+                'starters': 'Entrées',
+                'mains': 'Plats',
+                'desserts': 'Desserts'
+            };
+
+            for (const [key, label] of Object.entries(categories)) {
+                // Section Header
+                html += `<tr style="background:#eee;"><td colspan="5" style="font-weight:bold;">${label} <button class="btn-action" onclick="showAddModal('${key}')" style="float:right; background:var(--color-primary); color:white;">+ Ajouter</button></td></tr>`;
+
+                data[key].forEach((item, index) => {
+                    const imagePreview = item.image ? `<img src="${item.image}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">` : '<div style="width:50px; height:50px; background:#ddd; display:flex; align-items:center; justify-content:center; font-size:0.7rem; color:#666;">No Img</div>';
+
+                    html += `
+                        <tr>
+                            <td>
+                                ${imagePreview}
+                                <br>
+                                <button class="btn-text" onclick="triggerImageUpload('${key}', ${index})" style="font-size:0.7rem; margin-top:5px;">Changer Photo</button>
+                                <input type="file" id="file-${key}-${index}" style="display:none;" onchange="handleImageUpload(this, '${key}', ${index})">
+                            </td>
+                            <td>
+                                <input type="text" id="name-${key}-${index}" value="${item.name}" style="width:100%; border:none; border-bottom:1px solid #ddd; margin-bottom:5px; font-weight:bold;">
+                                <input type="text" id="desc-${key}-${index}" value="${item.description}" style="width:100%; border:none; font-size:0.8rem; color:#666;">
+                                <div style="margin-top:5px;">
+                                    <label><input type="checkbox" id="tag-vegan-${key}-${index}" ${item.tags && item.tags.includes('vegan') ? 'checked' : ''}> Vegan</label>
+                                    <label><input type="checkbox" id="tag-spicy-${key}-${index}" ${item.tags && item.tags.includes('spicy') ? 'checked' : ''}> Pimenté</label>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" id="price-${key}-${index}" value="${item.price}" style="width: 50px; padding: 5px;"> €
+                            </td>
+                            <td>
+                                <span class="status-badge ${item.available ? 'status-active' : 'status-inactive'}" 
+                                      onclick="toggleAvailability('${key}', ${index})" style="cursor:pointer;">
+                                    ${item.available ? 'En Stock' : 'Épuisé'}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-action" title="Sauvegarder" onclick="saveMenuItem('${key}', ${index})"><i class="fa-solid fa-save"></i></button>
+                                <button class="btn-action" title="Supprimer" onclick="deleteMenuItem('${key}', ${index})" style="color:red;"><i class="fa-solid fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            tbody.innerHTML = html;
+        }
+
+        function triggerImageUpload(cat, index) {
+            document.getElementById(`file-${cat}-${index}`).click();
+        }
+
+        async function handleImageUpload(input, cat, index) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function (e) {
+                    const data = await tedApi.fetchData('menu');
+                    data[cat][index].image = e.target.result; // Base64
+                    tedApi.saveData('menu', data);
+                    loadMenuEditor(); // Refresh to show preview
+                    alert("Photo mise à jour !");
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function saveMenuItem(category, index) {
+            const data = await tedApi.fetchData('menu');
+
+            // Get values
+            const name = document.getElementById(`name-${category}-${index}`).value;
+            const desc = document.getElementById(`desc-${category}-${index}`).value;
+            const price = document.getElementById(`price-${category}-${index}`).value;
+
+            // Get Tags
+            let tags = [];
+            if (document.getElementById(`tag-vegan-${category}-${index}`).checked) tags.push('vegan');
+            if (document.getElementById(`tag-spicy-${category}-${index}`).checked) tags.push('spicy');
+
+            // Update Data
+            data[category][index].name = name;
+            data[category][index].description = desc;
+            data[category][index].price = parseFloat(price);
+            data[category][index].tags = tags;
+
+            tedApi.saveData('menu', data);
+            alert('Plat mis à jour avec options Pro !');
+        }
+
+        async function showAddModal(category) {
+            // Simple prompt flow for now, can be upgraded to Modal later if needed
+            const name = prompt("Nom du nouveau plat :");
+            if (!name) return;
+            const desc = prompt("Description :");
+            const price = prompt("Prix (€) :", "10");
+
+            const newItem = {
+                id: Date.now(),
+                name: name,
+                description: desc || "",
+                price: parseFloat(price) || 0,
+                traceable: true,
+                available: true,
+                tags: []
+            };
+
+            const data = await tedApi.fetchData('menu');
+            data[category].push(newItem);
+            tedApi.saveData('menu', data);
+            loadMenuEditor(); // Refresh
+        }
+
+        async function deleteMenuItem(category, index) {
+            if (!confirm("Voulez-vous vraiment supprimer ce plat ?")) return;
+
+            const data = await tedApi.fetchData('menu');
+            data[category].splice(index, 1); // Remove item
+            tedApi.saveData('menu', data);
+            loadMenuEditor(); // Refresh
+        }
+
+        async function toggleAvailability(category, index) {
+            const data = await tedApi.fetchData('menu');
+            data[category][index].available = !data[category][index].available;
+            tedApi.saveData('menu', data);
+            loadMenuEditor();
+        }
+
+        // 2. GARDEN EDITOR
+        async function loadGardenEditor() {
+            const data = await tedApi.fetchData('garden');
+            const container = document.getElementById('garden-admin-container');
+            if (!container) return;
+
+            let html = '<div style="display:grid; gap:10px;">';
+            data.categories.forEach((cat, index) => {
+                html += `
+                    <div style="background:white; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <strong><i class="fa-solid ${cat.icon}"></i> ${cat.name}</strong>
+                            <p style="font-size:0.8rem; color:#666;">${cat.items.join(', ')}</p>
+                        </div>
+                        <button class="btn-action" onclick="alert('Simulation: Capteurs IoT calibrés.')">Calibrer IoT</button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // 3. USERS VIEW
+        async function loadUsers() {
+            const data = await tedApi.fetchData('users');
+            const container = document.getElementById('users-admin-container');
+            if (!container) return;
+
+            let html = `<table class="admin-table"><thead><tr><th>User</th><th>Rôle</th><th>ID</th></tr></thead><tbody>`;
+            data.users.forEach(u => {
+                html += `<tr><td>${u.name}</td><td><span class="status-badge status-active">${u.role}</span></td><td>${u.id}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>
