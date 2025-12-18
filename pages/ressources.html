@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ressources - TEDSAI Complex</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/mobile-nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -60,6 +61,32 @@
         </div>
     </footer>
 
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Navigation mobile principale">
+        <div class="mobile-nav-items">
+            <a href="../index.html" class="mobile-nav-item" aria-label="Accueil">
+                <i class="fa-solid fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="solutions-ia.html" class="mobile-nav-item" aria-label="Solutions IA">
+                <i class="fa-solid fa-brain"></i>
+                <span>IA</span>
+            </a>
+            <a href="vitedia.html" class="mobile-nav-item" aria-label="Restaurant viTEDia">
+                <i class="fa-solid fa-utensils"></i>
+                <span>viTEDia</span>
+            </a>
+            <a href="garden.html" class="mobile-nav-item" aria-label="SelecTED Gardens">
+                <i class="fa-solid fa-leaf"></i>
+                <span>Jardin</span>
+            </a>
+            <a href="observatoire.html" class="mobile-nav-item" aria-label="Observatoire">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>Obs</span>
+            </a>
+        </div>
+    </nav>
+
     <script src="../assets/js/data-loader.js"></script>
     <script>
         async function loadResources() {
@@ -112,6 +139,7 @@
 
         document.addEventListener('DOMContentLoaded', loadResources);
     </script>
+    <script src="/Users/dev-ai/Documents/TEDSAI-website/relative/path/fixer.js"></script>
 </body>
 
 </html>

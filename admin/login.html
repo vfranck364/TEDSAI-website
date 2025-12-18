@@ -4,123 +4,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEDSAI Admin - Connexion</title>
+    <title>Connexion Admin - TEDSAI</title>
+    <!-- Core CSS -->
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            background-color: #f4f6f9;
+            background: #f4f6f9;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 80px;
+            margin-bottom: 1rem;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .login-card {
             background: white;
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
-            text-align: center;
         }
 
         .login-header {
+            text-align: center;
             margin-bottom: 2rem;
         }
 
-        .login-header img {
-            height: 60px;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
+        .login-header h2 {
+            color: var(--color-primary);
             margin-bottom: 0.5rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-login:hover {
-            background: var(--color-secondary);
         }
 
         .error-msg {
             background: #ffebee;
             color: #c62828;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.9rem;
             margin-bottom: 1rem;
             display: none;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
+
     <div class="login-card">
         <div class="login-header">
-            <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="TEDSAI Logo">
-            <h2>Accès Sécurisé</h2>
-            <p style="color: #666; font-size: 0.9rem;">Portail d'Administration Unifié</p>
+            <h2>TEDSAI Admin</h2>
+            <p>Accès Sécurisé</p>
         </div>
-        <div id="error-alert" class="error-msg">Identifiants incorrects.</div>
+
+        <div id="error-msg" class="error-msg">Identifiants incorrects</div>
+
         <form id="login-form">
             <div class="form-group">
                 <label>Identifiant</label>
-                <input type="text" id="username" class="form-control" placeholder="ex: admin" required>
+                <input type="text" id="username" class="form-control" required placeholder="Identifiant">
             </div>
+
             <div class="form-group">
                 <label>Mot de passe</label>
-                <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                <input type="password" id="password" class="form-control" required placeholder="Mot de passe">
             </div>
-            <button type="submit" class="btn-login"><i class="fa-solid fa-lock"></i> Se Connecter</button>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Se Connecter</button>
         </form>
-        <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #999;">
-            <i class="fa-solid fa-shield-halved"></i> Connexion chiffrée (Simulation)
-        </p>
+
+        <div
+            style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee; text-align: left; font-size: 0.85rem; color: #666;">
+            <p style="font-weight: bold; margin-bottom: 0.5rem; color: #4a5568;">Comptes de Démo (Mots de passe : role +
+                '123')</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 4px;">👤 <strong>superadmin</strong> (Tout accès) - <em
+                        style="color:#aaa">admin123</em></li>
+                <li style="margin-bottom: 4px;">🍳 <strong>resto</strong> (Restaurant) - <em
+                        style="color:#aaa">resto123</em></li>
+                <li style="margin-bottom: 4px;">🌿 <strong>garden</strong> (Jardin) - <em
+                        style="color:#aaa">garden123</em></li>
+                <li style="margin-bottom: 4px;">🧠 <strong>ia</strong> (IA / Services) - <em
+                        style="color:#aaa">ia123</em></li>
+            </ul>
+        </div>
     </div>
 
-    <script src="../assets/js/data-loader.js"></script>
-    <script>
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    <!-- DB & Auth Core -->
+    <script src="../assets/js/core/db.js"></script>
+    <script src="../assets/js/core/auth.js"></script>
 
-            const result = await tedApi.login(username, password);
+    <script>
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('error-msg');
+            const btn = document.querySelector('button[type="submit"]');
+
+            const result = TedAuth.login(user, pass);
+
             if (result.success) {
-                window.location.href = 'dashboard.html';
+                // Animation de succès
+                errorDiv.style.display = 'block';
+                errorDiv.style.background = '#e8f5e9';
+                errorDiv.style.color = '#2e7d32';
+                errorDiv.innerText = "Connexion réussie. Redirection...";
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 800);
             } else {
-                const errorAlert = document.getElementById('error-alert');
-                errorAlert.style.display = 'block';
-                errorAlert.textContent = result.message;
+                errorDiv.style.display = 'block';
+                errorDiv.style.background = '#ffebee';
+                errorDiv.style.color = '#c62828';
+                errorDiv.innerText = result.message || "Erreur inconnue";
             }
         });
     </script>

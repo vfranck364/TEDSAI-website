@@ -4,189 +4,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'Observatoire TEDSAI - Analyses & Tendances</title>
+    <title>L'Observatoire TEDSAI - Analyses & Tendances Social</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/mobile-nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Language Switcher - Click to Toggle */
-        /* Simple Blue Language Toggle Button */
-        #lang-toggle-btn {
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: 15px;
+        :root {
+            --obs-primary: #0A2463;
+            --obs-secondary: #5AA9E6;
+            --obs-bg: #f8fafc;
         }
 
-        #lang-toggle-btn:hover {
-            background: #1976D2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        body {
+            background-color: var(--obs-bg);
         }
 
-        #lang-toggle-btn i {
-            font-size: 1.1rem;
-        }
-
-        .obs-hero {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: white;
-            padding: 6rem 0 4rem;
-            text-align: center;
-        }
-
-        .obs-hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .obs-hero .subtitle {
-            font-size: 1.3rem;
-            opacity: 0.95;
-            margin-bottom: 2rem;
-        }
-
-        .mission-box {
+        /* Hero Style Frontline */
+        .obs-hero-v2 {
             background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 900px;
-            margin: -3rem auto 3rem;
+            padding: 5rem 0 3rem;
             position: relative;
-            z-index: 10;
-        }
-
-        .category-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-
-        .category-btn {
-            padding: 8px 16px;
-            border: 2px solid var(--color-primary);
-            background: white;
-            color: var(--color-primary);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .category-btn:hover,
-        .category-btn.active {
-            background: var(--color-primary);
-            color: white;
-        }
-
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .article-card {
-            background: white;
-            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .article-image {
-            width: 100%;
-            height: 200px;
+        .hero-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
+            justify-content: space-between;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        .article-content {
-            padding: 1.5rem;
+        .hero-text {
+            flex: 1;
+            text-align: left;
         }
 
-        .article-meta {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            color: #666;
+        .hero-text h1 {
+            font-size: 3.5rem;
+            color: var(--obs-primary);
             margin-bottom: 1rem;
+            font-weight: 800;
         }
 
-        .article-category {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-
-        .article-title {
-            font-size: 1.3rem;
-            margin: 0.5rem 0;
-            color: var(--color-primary);
-        }
-
-        .article-summary {
-            color: #555;
-            font-size: 0.95rem;
+        .hero-text p {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
             line-height: 1.6;
         }
 
-        .newsletter-cta {
-            background: var(--color-secondary);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 12px;
-            text-align: center;
-            margin: 4rem 0;
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: 10px;
-            max-width: 500px;
-            margin: 1.5rem auto 0;
-        }
-
-        .newsletter-form input {
+        .hero-image {
             flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
+            text-align: right;
+            display: none;
         }
 
-        .newsletter-form button {
-            padding: 12px 24px;
-            background: var(--color-primary);
+        @media (min-width: 992px) {
+            .hero-image {
+                display: block;
+            }
+        }
+
+        /* Pills Navigation */
+        .category-nav {
+            padding: 2rem 0;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .pills-container {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .pill {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .pill:hover,
+        .pill.active {
+            background: var(--obs-primary);
+            color: white;
+            border-color: var(--obs-primary);
+        }
+
+        /* Social Article Cards */
+        .obs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            padding: 4rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .obs-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .obs-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card-img {
+            height: 220px;
+            position: relative;
+            background: #cbd5e1;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--obs-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-meta {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--obs-primary);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-weight: 700;
+        }
+
+        .card-excerpt {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Social Actions */
+        .card-social {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .social-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .social-btn:hover {
+            color: var(--obs-primary);
+        }
+
+        .social-btn.liked {
+            color: #ef4444;
+        }
+
+        .social-btn.liked i {
+            animation: heartBeat 0.3s ease-in-out;
+        }
+
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Floating Action Button */
+        .fab-submit {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--obs-primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(10, 36, 99, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .fab-submit:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* Modal Simple */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+            /* Permet le défilement de la modal entière */
+            padding: 2rem 0;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin: auto;
+            position: relative;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .btn-submit {
+            background: var(--obs-primary);
             color: white;
             border: none;
-            border-radius: 6px;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #081d4a;
+        }
+
+        .editor-area.columns-2 {
+            column-count: 2;
+            column-gap: 2rem;
+            column-rule: 1px solid #e2e8f0;
+        }
+
+        .tool-btn input[type="color"] {
+            border: none;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            cursor: pointer;
+            background: none;
+        }
+
+        /* Rich Editor Styles */
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .tool-btn {
+            padding: 0.5rem;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #475569;
+            min-width: 35px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-btn:hover {
+            background: #e2e8f0;
+            color: var(--obs-primary);
+        }
+
+        .tool-btn.active {
+            background: var(--obs-primary);
+            color: white;
+        }
+
+        .editor-area {
+            min-height: 400px;
+            max-height: 60vh;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            padding: 2rem;
+            background: white;
+            outline: none;
+            border-radius: 0 0 10px 10px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .editor-area h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--obs-primary);
+        }
+
+        .editor-area h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--obs-primary);
+        }
+
+        .editor-area p {
+            margin-bottom: 1rem;
+        }
+
+        .editor-area img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 1rem 0;
+            display: block;
+        }
+
+        /* Shapes & Special Elements */
+        .editor-callout {
+            background: #f1f5f9;
+            border-left: 5px solid var(--obs-primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+            position: relative;
+        }
+
+        .editor-text-box {
+            display: block;
+            border: 2px solid #cbd5e1;
+            padding: 1rem;
+            background: white;
+            min-height: 50px;
+            margin: 1rem 0;
+            border-radius: 8px;
+            position: relative;
+            resize: both;
+            /* Permet le redimensionnement */
+            overflow: auto;
+            z-index: 1;
+            /* Base z-index */
+            transition: outline 0.2s, box-shadow 0.2s;
+        }
+
+        .editor-text-box.scrollable {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .editor-text-box.transparent-bg {
+            background-color: transparent !important;
+        }
+
+        .editor-text-box.transparent-border {
+            border-color: transparent !important;
+        }
+
+        .editor-area img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 1rem 0;
+            display: block;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* Pour redimensionner les images, on les rend changeables via drag sur le coin dans certains environnements, 
+           sinon on peut utiliser width/height inline. On ajoute une classe si selectionné. */
+        .editor-area img.selected-block {
+            resize: both;
+            overflow: hidden;
+            border: 3px solid var(--obs-secondary);
+        }
+
+        .editor-callout {
+            border-left: 5px solid var(--obs-primary);
+            background: #f1f5f9;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .editor-callout.transparent-bg {
+            background-color: transparent !important;
+        }
+
+        .editor-callout.transparent-border {
+            border-left-color: transparent !important;
+        }
+
+        .selected-block {
+            outline: 2px dashed var(--obs-secondary) !important;
+            outline-offset: 4px;
+            z-index: 10;
+            /* Bring forward visually in editor */
+        }
+
+        /* Smart Button Style */
+        .editor-button {
+            display: inline-block;
+            background: var(--obs-primary);
+            color: white !important;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+
+        .editor-area blockquote {
+            border-left: 4px solid var(--obs-primary);
+            padding-left: 1rem;
+            font-style: italic;
+            color: #64748b;
+            margin: 1rem 0;
+        }
+
+        .modal-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e2e8f0;
+        }
+
+        .step-dot.active {
+            background: var(--obs-primary);
+            transform: scale(1.3);
         }
     </style>
 </head>
@@ -195,277 +552,470 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <a href="../index.html" title="Home / Accueil">
-                    <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="TEDSAI Logo" style="height: 50px;">
-                </a>
+                <a href="../index.html"><img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="Logo"
+                        style="height: 50px;"></a>
             </div>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span data-i18n="nav.home">Accueil</span></a>
-                <a href="solutions-ia.html" data-i18n="nav.solutions">Solutions IA</a>
-                <a href="vitedia.html" data-i18n="nav.vitedia">viTEDia</a>
-                <a href="garden.html" data-i18n="nav.garden">SelecTED Gardens</a>
-                <a href="observatoire.html" style="color: var(--color-primary);"
-                    data-i18n="nav.observatory">Observatoire</a>
-                <a href="contact.html" data-i18n="nav.contact">Contact</a>
+                <a href="../index.html">Accueil</a>
+                <a href="solutions-ia.html">Solutions IA</a>
+                <a href="vitedia.html">viTEDia</a>
+                <a href="garden.html">SelecTED Gardens</a>
+                <a href="observatoire.html" style="font-weight: bold; color: var(--obs-primary);">L'Observatoire</a>
+                <a href="contact.html" class="btn-cta">Contact</a>
             </nav>
         </div>
     </header>
 
-    <section class="obs-hero">
-        <div class="container">
-            <h1 data-i18n="hero.observatory_title">TEDSAI Observatory</h1>
-            <p class="subtitle" data-i18n="hero.observatory_subtitle">Analysis & Trends</p>
-            <p style="font-size: 1.1rem; opacity: 0.9;" data-i18n="hero.observatory_topics">AI • Agriculture • Livestock
-                • Commerce • SMEs • Economy</p>
+    <section class="obs-hero-v2">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>Nos Analyses & Insights</h1>
+                <p>Découvrez les tendances deep-tech, agro-pastorales et économiques qui façonnent l'Afrique de demain.
+                    Données réelles, impact concret.</p>
+            </div>
+            <div class="hero-image">
+                <img src="https://img.freepik.com/free-vector/blogging-concept-illustration_114360-1038.jpg?w=800"
+                    alt="Analyses" style="max-width: 400px; border-radius: 20px;">
+            </div>
         </div>
     </section>
 
+    <div class="category-nav">
+        <div class="pills-container" id="category-pills">
+            <button class="pill active" onclick="Observatory.filter('all', this)">Tous</button>
+            <!-- Dynamically loaded -->
+        </div>
+    </div>
+
     <div class="container">
-        <div class="mission-box">
-            <h2 style="color: var(--color-primary); margin-bottom: 1rem;" data-i18n="observatory.mission_title">Our
-                Mission</h2>
-            <p style="font-size: 1.05rem; line-height: 1.8; color: #555;" data-i18n-html="observatory.mission_text">
-                Publish <strong>economic, statistical and socio-economic analyses</strong> on trends related to TEDSAI
-                domains,
-                with a <strong>Cameroon → Africa → World</strong> focus. Our content is designed for SMEs, large
-                companies,
-                decision-makers, agro-pastoral actors and partners.
-            </p>
-            <div style="background: #f8f9fa; padding: 1rem; border-left: 4px solid var(--color-secondary); margin-top: 1.5rem;"
-                data-i18n-html="observatory.mission_promise">
-                <strong>Our Promise:</strong> Actionable insights → <em>Data → Reading → Decision → Action Plan</em>
+        <div class="obs-grid" id="posts-grid">
+            <!-- Dynamically loaded social cards -->
+        </div>
+    </div>
+
+    <button class="fab-submit" onclick="Observatory.openSubmitModal()" title="Proposer un article">
+        <i class="fa-solid fa-plus fa-xl"></i>
+    </button>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Navigation mobile principale">
+        <div class="mobile-nav-items">
+            <a href="../index.html" class="mobile-nav-item" aria-label="Accueil">
+                <i class="fa-solid fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="solutions-ia.html" class="mobile-nav-item" aria-label="Solutions IA">
+                <i class="fa-solid fa-brain"></i>
+                <span>IA</span>
+            </a>
+            <a href="vitedia.html" class="mobile-nav-item" aria-label="Restaurant viTEDia">
+                <i class="fa-solid fa-utensils"></i>
+                <span>viTEDia</span>
+            </a>
+            <a href="garden.html" class="mobile-nav-item" aria-label="SelecTED Gardens">
+                <i class="fa-solid fa-leaf"></i>
+                <span>Jardin</span>
+            </a>
+            <a href="observatoire.html" class="mobile-nav-item active" aria-label="Observatoire">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>Obs</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Modal Submission -->
+    <div id="submit-modal" class="modal">
+        <div class="modal-content" style="max-width: 900px; padding: 2.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h2 style="color:var(--obs-primary);" id="modal-title">Proposer une Analyse</h2>
+                <button onclick="Observatory.closeSubmitModal()"
+                    style="border:none; background:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+
+            <div class="step-indicator">
+                <div class="step-dot active" id="dot-1"></div>
+                <div class="step-dot" id="dot-2"></div>
+            </div>
+
+            <!-- STEP 1: METADATA -->
+            <div id="step-1">
+                <p style="color:#64748b; margin-bottom:1.5rem; font-size:0.9rem;">Commencez par les informations de base
+                    de votre article.</p>
+                <form id="submit-form-step1">
+                    <div class="form-group">
+                        <label>Votre Nom / Organisation</label>
+                        <input type="text" id="post-author" required placeholder="Ex: Jean Dupont">
+                    </div>
+                    <div class="form-group">
+                        <label>Titre de l'Analyse</label>
+                        <input type="text" id="post-title" required placeholder="Un titre percutant...">
+                    </div>
+                    <div class="form-group">
+                        <label>Catégorie</label>
+                        <select id="modal-cat-select" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Résumé court (s'affiche sur la grille)</label>
+                        <textarea id="post-summary" rows="3" required
+                            placeholder="De quoi parle votre article ?"></textarea>
+                    </div>
+                    <button type="button" class="btn-submit" onclick="Observatory.goToStep(2)">Suivant : Rédiger le
+                        contenu</button>
+                </form>
+            </div>
+
+            <!-- STEP 2: RICH EDITOR -->
+            <div id="step-2" style="display: none;">
+                <p style="color:#64748b; margin-bottom:1.5rem; font-size:0.9rem;">Rédigez maintenant votre article
+                    complet. Utilisez la barre d'outils pour la mise en forme.</p>
+
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <button class="tool-btn" onclick="Observatory.exec('undo')" title="Annuler"><i
+                                class="fa-solid fa-undo"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('redo')" title="Retablir"><i
+                                class="fa-solid fa-redo"></i></button>
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <button class="tool-btn" onclick="Observatory.exec('bold')" title="Gras"><i
+                                class="fa-solid fa-bold"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('italic')" title="Italique"><i
+                                class="fa-solid fa-italic"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('underline')" title="Souligné"><i
+                                class="fa-solid fa-underline"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('strikeThrough')" title="Barré"><i
+                                class="fa-solid fa-strikethrough"></i></button>
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <div class="tool-btn" title="Couleur Texte">
+                            <i class="fa-solid fa-font" style="margin-right:5px;"></i>
+                            <input type="color" onchange="Observatory.exec('foreColor', this.value)" value="#0A2463">
+                        </div>
+                        <div class="tool-btn" title="Surlignage">
+                            <i class="fa-solid fa-highlighter" style="margin-right:5px;"></i>
+                            <input type="color" onchange="Observatory.exec('hiliteColor', this.value)" value="#ffffff">
+                        </div>
+                        <div class="tool-btn" title="Couleur Page">
+                            <i class="fa-solid fa-fill-drip" style="margin-right:5px;"></i>
+                            <input type="color" onchange="Observatory.changePageColor(this.value)" value="#ffffff">
+                        </div>
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <button class="tool-btn" onclick="Observatory.exec('formatBlock', 'H1')" title="Titre 1"><i
+                                class="fa-solid fa-h1"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('formatBlock', 'H2')" title="Titre 2"><i
+                                class="fa-solid fa-h2"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('formatBlock', 'P')" title="Texte normal"><i
+                                class="fa-solid fa-paragraph"></i></button>
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <button class="tool-btn" onclick="Observatory.exec('insertUnorderedList')"
+                            title="Liste à puces"><i class="fa-solid fa-list-ul"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('insertOrderedList')"
+                            title="Liste numérotée"><i class="fa-solid fa-list-ol"></i></button>
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <button class="tool-btn" onclick="Observatory.exec('justifyLeft')" title="Gauche"><i
+                                class="fa-solid fa-align-left"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('justifyCenter')" title="Centrer"><i
+                                class="fa-solid fa-align-center"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('justifyRight')" title="Droite"><i
+                                class="fa-solid fa-align-right"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('justifyFull')" title="Justifier"><i
+                                class="fa-solid fa-align-justify"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('insertHorizontalRule')"
+                            title="Ligne Horizontale"><i class="fa-solid fa-minus"></i></button>
+                        <button class="tool-btn" onclick="Observatory.toggleColumns()" title="Basculez 1/2 Colonnes"><i
+                                class="fa-solid fa-columns"></i></button>
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+
+                        <button class="tool-btn" onclick="document.getElementById('editor-image-input').click()"
+                            title="Insérer Image (Upload)"><i class="fa-solid fa-image"></i></button>
+                        <input type="file" id="editor-image-input" style="display:none" accept="image/*"
+                            onchange="Observatory.handleImageUpload(this)">
+                        <button class="tool-btn" onclick="Observatory.insertCallout()" title="Insérer Encadré"><i
+                                class="fa-solid fa-square-poll-horizontal"></i></button>
+                        <button class="tool-btn" onclick="Observatory.insertTextBox()" title="Zone de Texte"><i
+                                class="fa-solid fa-vector-square"></i></button>
+                        <button class="tool-btn" onclick="Observatory.insertSmartButton()" title="Bouton d'Action"><i
+                                class="fa-solid fa-rectangle-ad"></i></button>
+
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <button class="tool-btn" onclick="Observatory.toggleTransparency('bg')"
+                            title="Fond Transparent"><i class="fa-solid fa-droplet-slash"></i></button>
+                        <button class="tool-btn" onclick="Observatory.toggleTransparency('border')"
+                            title="Bordure Transparente"><i class="fa-solid fa-border-none"></i></button>
+                        <button class="tool-btn" onclick="Observatory.bringToFront()" title="Premier Plan"><i
+                                class="fa-solid fa-layer-group"></i></button>
+                        <button class="tool-btn" onclick="Observatory.toggleScroll()" title="Mode Déroulable"><i
+                                class="fa-solid fa-arrows-up-down"></i></button>
+
+                        <div style="width:1px; background:#cbd5e1; margin:0 5px;"></div>
+                        <button class="tool-btn" onclick="Observatory.exec('createLink')" title="Lien"><i
+                                class="fa-solid fa-link"></i></button>
+                        <button class="tool-btn" onclick="Observatory.exec('removeFormat')"
+                            title="Effacer mise en forme"><i class="fa-solid fa-eraser"></i></button>
+                    </div>
+                    <div id="editor-content" class="editor-area" contenteditable="true">
+                        <h1>Titre de votre article...</h1>
+                        <p>Commencez à rédiger ici. Vous pouvez utiliser <strong>le gras</strong>, <em>l'italique</em>,
+                            et insérer des listes ou des images pour rendre votre analyse percutante.</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="Observatory.goToStep(1)">Précédent</button>
+                    <button class="btn-submit" style="flex:2;" onclick="Observatory.finalSubmit()">Envoyer pour
+                        modération</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <section class="container">
-        <h2 style="text-align: center; margin-bottom: 1rem;" data-i18n="observatory.explore_title">Explore by Topic</h2>
-        <div class="category-filter" id="category-filter">
-            <button class="category-btn active" onclick="filterArticles('all')" data-i18n="observatory.all">All</button>
-        </div>
-    </section>
-
-    <section class="container">
-        <div class="articles-grid" id="articles-grid">
-            <p style="text-align: center; color: #777;"><i class="fa-solid fa-spinner fa-spin"></i> <span
-                    data-i18n="common.loading">Loading...</span></p>
-        </div>
-    </section>
-
-    <section class="container">
-        <div class="newsletter-cta">
-            <h2 style="margin: 0 0 1rem;" data-i18n="observatory.newsletter_title">Receive Our Analysis by Email</h2>
-            <p data-i18n="observatory.newsletter_text">Subscribe to our weekly newsletter: trends, barometers and case
-                studies.</p>
-            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
-                <input type="email" data-i18n="observatory.newsletter_placeholder" placeholder="your@email.com"
-                    required>
-                <button type="submit" data-i18n="observatory.newsletter_button">Subscribe</button>
-            </form>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-col">
-                <h4>TEDSAI Complex</h4>
-                <p>Innovation • Agriculture • Restauration</p>
-            </div>
-            <div class="footer-col">
-                <h4>Observatoire</h4>
-                <ul>
-                    <li><a href="#">Tous les articles</a></li>
-                    <li><a href="#">Newsletter</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <p>Email: contact@tedsai.cm</p>
-            </div>
-        </div>
-        <div class="container"
-            style="text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 2rem;">
-            <p>&copy; 2025 TEDSAI Complex. Tous droits réservés.</p>
+    <footer style="background: var(--color-primary); padding: 3rem 0; color: white; margin-top: 4rem;">
+        <div class="container" style="text-align:center;">
+            <p>&copy; 2024 TEDSAI Complex - Pôle Observatoire. Tous droits réservés.</p>
         </div>
     </footer>
 
-    <script src="../assets/js/i18n.js"></script>
+    <!-- Scripts -->
+    <script src="../assets/js/core/db.js"></script>
+    <script src="../assets/js/core/api.js"></script>
     <script>
-        // Toggle language dropdown on click
-        function toggleLangDropdown(event) {
-            event.stopPropagation();
-            const dropdown = document.getElementById('lang-dropdown');
-            dropdown.classList.toggle('active');
-        }
+        const Observatory = {
+            init() {
+                this.loadCategories();
+                this.loadPosts();
+            },
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (event) {
-            const dropdown = document.getElementById('lang-dropdown');
-            const switcher = document.querySelector('.language-switcher');
-            if (dropdown && !switcher.contains(event.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
+            loadCategories() {
+                const cats = TedAPI.Blog.getCategories();
+                const container = document.getElementById('category-pills');
+                const select = document.getElementById('modal-cat-select');
 
-        // Override switchLang to close dropdown and highlight active language
-        const originalSwitchLang = window.switchLang;
-        window.switchLang = function (lang) {
-            // Call original function
-            if (typeof i18n !== 'undefined') {
-                i18n.switchLanguage(lang);
-            }
+                cats.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'pill';
+                    btn.textContent = cat.name;
+                    btn.onclick = (e) => this.filter(cat.id, e.target);
+                    container.appendChild(btn);
 
-            // Close dropdown
-            const dropdown = document.getElementById('lang-dropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
-            }
-
-            // Highlight active language
-            document.querySelectorAll('.lang-dropdown a').forEach(link => {
-                link.classList.toggle('active-lang', link.dataset.lang === lang);
-            });
-        };
-
-        // Highlight current language on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(() => {
-                const currentLang = i18n.getCurrentLanguage();
-                document.querySelectorAll('.lang-dropdown a').forEach(link => {
-                    link.classList.toggle('active-lang', link.dataset.lang === currentLang);
+                    const opt = document.createElement('option');
+                    opt.value = cat.id;
+                    opt.textContent = cat.name;
+                    select.appendChild(opt);
                 });
-            }, 100);
-        });
+            },
 
-        // Embedded data to avoid fetch issues
-        const ARTICLES_DATA = {
-            "articles": [
-                { "id": "ia-pme-cameroun-2025", "title": "IA Générative pour PME Camerounaises : ROI Réel en 2025", "category": "ia", "author": "Équipe TEDSAI", "date": "2025-01-10", "readTime": "8 min", "summary": "Analyse chiffrée du retour sur investissement de l'IA générative pour 30 PME camerounaises. Résultats : +35% productivité, -20% coûts opérationnels." },
-                { "id": "rendement-maraichage-urbain", "title": "Rendement Maraîchage Urbain : Yaoundé vs Douala (Données 2024)", "category": "agriculture", "author": "Équipe SelecTED Gardens", "date": "2025-01-08", "readTime": "6 min", "summary": "Comparaison des rendements en agriculture urbaine entre Yaoundé et Douala. Tomates : 45kg/m² à Yaoundé vs 38kg/m² à Douala. Analyse des facteurs clés." },
-                { "id": "poulet-chair-analyse-couts", "title": "Poulet de Chair : Analyse Coûts/Bénéfices (Rations Locales vs Importées)", "category": "elevage", "author": "TEDSAI Élevage", "date": "2025-01-05", "readTime": "10 min", "summary": "Étude comparative sur 500 poulets : rations locales = -15% coût, même croissance. Rentabilité : 28% avec local vs 22% avec importé." },
-                { "id": "prix-epices-yaounde-2024", "title": "Prix des Épices à Yaoundé : Tendances Saisonnières 2024", "category": "epicerie", "author": "TEDSAI Épicerie", "date": "2025-01-03", "readTime": "5 min", "summary": "Baromètre annuel des prix : Piment +12%, Gingembre stable, Poivre -8%. Meilleurs mois d'achat identifiés pour chaque épice." },
-                { "id": "marges-restauration-etude", "title": "Marges Restauration : Étude de 50 Établissements Yaoundé", "category": "restauration", "author": "viTEDia Insights", "date": "2024-12-28", "readTime": "7 min", "summary": "Marge moyenne : 32%. Top performers : 45%+ grâce à l'approvisionnement local et à la réduction du gaspillage. Méthodologie détaillée." },
-                { "id": "inflation-secteur-alimentaire", "title": "Inflation & Pouvoir d'Achat : Impact sur le Secteur Alimentaire", "category": "economie", "author": "Observatoire TEDSAI", "date": "2024-12-20", "readTime": "9 min", "summary": "Inflation alimentaire 2024 : +8,5%. Analyse des stratégies d'adaptation des ménages et opportunités pour les producteurs locaux." },
-                { "id": "vitedia-reduction-gaspillage", "title": "Cas viTEDia : Réduction du Gaspillage de 40% avec l'IA", "category": "cas-tedsai", "author": "TEDSAI IA", "date": "2024-12-15", "readTime": "6 min", "summary": "Étude de cas : système de prévision de demande par IA. Résultats : -40% gaspillage, +18% marge nette, ROI en 4 mois." },
-                { "id": "checklist-elevage-poisson", "title": "Checklist : Lancer un Élevage de Poisson Rentable", "category": "pratique", "author": "TEDSAI Élevage", "date": "2024-12-10", "readTime": "12 min", "summary": "Guide complet : choix du site, construction des bassins, gestion de l'eau, alimentation, biosécurité. Budget type : 2M FCFA pour démarrer." },
-                { "id": "barometre-prix-hebdo", "title": "Baromètre Prix Hebdo : Poulet, Poisson, Tomates (Semaine 2)", "category": "barometre", "author": "Observatoire TEDSAI", "date": "2025-01-12", "readTime": "3 min", "summary": "Mise à jour hebdomadaire : Poulet vif 2200 FCFA/kg (-50 FCFA), Tilapia 1800 FCFA/kg (stable), Tomates 800 FCFA/kg (+100 FCFA)." },
-                { "id": "portrait-producteur-epices", "title": "Portrait : Un Producteur d'Épices de l'Ouest Cameroun", "category": "interview", "author": "Observatoire TEDSAI", "date": "2024-12-05", "readTime": "8 min", "summary": "Rencontre avec Jean K., producteur de gingembre à Foumbot. De 0,5 ha à 3 ha en 5 ans. Secrets de réussite et défis du marché." }
-            ],
-            "categories": [
-                { "id": "ia", "name": "Intelligence Artificielle", "color": "#0A2463" },
-                { "id": "agriculture", "name": "Agriculture", "color": "#2D5A27" },
-                { "id": "elevage", "name": "Élevage", "color": "#8B4513" },
-                { "id": "restauration", "name": "Restauration", "color": "#8B1538" },
-                { "id": "epicerie", "name": "Épicerie & Produits", "color": "#D35400" },
-                { "id": "commerce", "name": "Commerce & PME", "color": "#34495E" },
-                { "id": "economie", "name": "Économie", "color": "#16A085" },
-                { "id": "cas-tedsai", "name": "Cas TEDSAI", "color": "#E67E22" },
-                { "id": "pratique", "name": "Guides Pratiques", "color": "#27AE60" },
-                { "id": "barometre", "name": "Baromètres", "color": "#C0392B" },
-                { "id": "interview", "name": "Interviews", "color": "#9B59B6" }
-            ]
+            loadPosts(filter = 'all') {
+                const grid = document.getElementById('posts-grid');
+                let posts = TedAPI.Blog.getPosts();
+
+                if (filter !== 'all') {
+                    posts = posts.filter(p => p.category === filter);
+                }
+
+                grid.innerHTML = posts.map(post => `
+                    <article class="obs-card">
+                        <div class="card-img" onclick="window.location.href='article.html?id=${post.id}'" style="cursor:pointer;">
+                            <img src="${post.image || '../assets/images/hero_bg.png'}" alt="${post.title}">
+                            <span class="category-badge">${post.category}</span>
+                        </div>
+                        <div class="card-body" onclick="window.location.href='article.html?id=${post.id}'" style="cursor:pointer;">
+                            <div class="card-meta">
+                                <span><i class="fa-solid fa-user"></i> ${post.author}</span> • 
+                                <span><i class="fa-solid fa-calendar"></i> ${new Date(post.date).toLocaleDateString('fr-FR')}</span>
+                            </div>
+                            <h3 class="card-title">${post.title}</h3>
+                            <p class="card-excerpt">${post.summary}</p>
+                        </div>
+                        <div class="card-social">
+                            <button class="social-btn" onclick="Observatory.like('${post.id}', this)">
+                                <i class="fa-solid fa-heart"></i> <span class="count">${post.likes || 0}</span>
+                            </button>
+                            <button class="social-btn" onclick="window.location.href='article.html?id=${post.id}#comments'">
+                                <i class="fa-solid fa-comment"></i> Commenter
+                            </button>
+                        </div>
+                    </article>
+                `).join('');
+            },
+
+            filter(catId, btn) {
+                document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                this.loadPosts(catId);
+            },
+
+            like(id, btn) {
+                if (btn.classList.contains('liked')) return;
+                if (TedAPI.Blog.likePost(id)) {
+                    btn.classList.add('liked');
+                    const countSpan = btn.querySelector('.count');
+                    countSpan.textContent = parseInt(countSpan.textContent) + 1;
+                }
+            },
+
+            openSubmitModal() {
+                this.goToStep(1);
+                document.getElementById('submit-modal').style.display = 'flex';
+            },
+
+            closeSubmitModal() { document.getElementById('submit-modal').style.display = 'none'; },
+
+            goToStep(step) {
+                if (step === 2) {
+                    // Validation simple étape 1
+                    if (!document.getElementById('post-author').value || !document.getElementById('post-title').value) {
+                        alert("Veuillez remplir les informations de base.");
+                        return;
+                    }
+                    document.getElementById('step-1').style.display = 'none';
+                    document.getElementById('step-2').style.display = 'block';
+                    document.getElementById('dot-1').classList.remove('active');
+                    document.getElementById('dot-2').classList.add('active');
+                    document.getElementById('modal-title').textContent = "Rédaction de l'Analyse";
+                } else {
+                    document.getElementById('step-1').style.display = 'block';
+                    document.getElementById('step-2').style.display = 'none';
+                    document.getElementById('dot-1').classList.add('active');
+                    document.getElementById('dot-2').classList.remove('active');
+                    document.getElementById('modal-title').textContent = "Proposer une Analyse";
+                }
+            },
+
+            exec(command, value = null) {
+                if (command === 'createLink') {
+                    const selection = window.getSelection();
+                    if (selection.toString().length === 0) {
+                        const text = prompt("Texte du lien :");
+                        if (!text) return;
+                        const url = prompt("URL du lien :");
+                        if (!url) return;
+                        const link = `<a href="${url}" target="_blank" style="color:var(--obs-secondary); text-decoration:underline;">${text}</a>`;
+                        document.execCommand('insertHTML', false, link);
+                        return;
+                    } else {
+                        const url = prompt("URL du lien :");
+                        if (!url) return;
+                        document.execCommand('createLink', false, url);
+                        return;
+                    }
+                }
+                document.execCommand(command, false, value);
+                document.getElementById('editor-content').focus();
+            },
+
+            handleImageUpload(input) {
+                const file = input.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const base64 = e.target.result;
+                    const img = `<img src="${base64}" style="max-width:100%; border-radius:10px; margin: 1rem 0;">`;
+                    document.execCommand('insertHTML', false, img);
+                };
+                reader.readAsDataURL(file);
+                input.value = ''; // Reset for next use
+            },
+
+            insertCallout() {
+                const html = `<div class="editor-callout" onclick="Observatory.selectBlock(this)"><strong>💡 Note :</strong><br>Saisissez votre texte ici...</div><p><br></p>`;
+                document.execCommand('insertHTML', false, html);
+            },
+
+            insertTextBox() {
+                const html = `<div class="editor-text-box" onclick="Observatory.selectBlock(this)">Zone de texte personnalisable...</div><p><br></p>`;
+                document.execCommand('insertHTML', false, html);
+            },
+
+            selectBlock(el) {
+                document.querySelectorAll('.selected-block').forEach(b => b.classList.remove('selected-block'));
+                el.classList.add('selected-block');
+                // Prevent bubbling to editor focus if needed
+                event.stopPropagation();
+            },
+
+            toggleTransparency(type) {
+                const selected = document.querySelector('.selected-block');
+                if (!selected) {
+                    alert("Veuillez d'abord cliquer sur une zone de texte ou un encadré pour le sélectionner.");
+                    return;
+                }
+                if (type === 'bg') selected.classList.toggle('transparent-bg');
+                if (type === 'border') selected.classList.toggle('transparent-border');
+            },
+
+            bringToFront() {
+                const selected = document.querySelector('.selected-block');
+                if (selected) {
+                    selected.style.zIndex = "100";
+                    selected.style.position = "relative";
+                }
+            },
+
+            toggleScroll() {
+                const selected = document.querySelector('.selected-block');
+                if (selected) {
+                    selected.classList.toggle('scrollable');
+                }
+            },
+
+            insertSmartButton() {
+                const text = prompt("Texte du bouton :", "En savoir plus");
+                const url = prompt("URL du bouton :", "https://");
+                if (text && url) {
+                    const html = `<a href="${url}" target="_blank" class="editor-button" style="display:inline-block; background:var(--obs-primary); color:white; padding:0.8rem 1.5rem; border-radius:50px; text-decoration:none;">${text}</a><span>&nbsp;</span>`;
+                    document.execCommand('insertHTML', false, html);
+                }
+            },
+
+            toggleColumns() {
+                const editor = document.getElementById('editor-content');
+                editor.classList.toggle('columns-2');
+            },
+
+            changePageColor(color) {
+                document.getElementById('editor-content').style.backgroundColor = color;
+            },
+
+            finalSubmit() {
+                const editor = document.getElementById('editor-content');
+                const content = editor.innerHTML;
+                const isTwoColumns = editor.classList.contains('columns-2');
+                const bgColor = editor.style.backgroundColor;
+
+                if (content.length < 50) {
+                    alert("Votre article semble trop court. Veuillez développer votre analyse.");
+                    return;
+                }
+
+                const data = {
+                    author: document.getElementById('post-author').value,
+                    title: document.getElementById('post-title').value,
+                    category: document.getElementById('modal-cat-select').value,
+                    summary: document.getElementById('post-summary').value,
+                    content: content,
+                    layout: isTwoColumns ? 'columns-2' : 'columns-1',
+                    bgColor: bgColor || '#ffffff',
+                    image: ''
+                };
+
+                TedAPI.Blog.submitGuestPost(data);
+
+                alert("Merci ! Votre analyse complète a été envoyée pour modération.");
+                this.closeSubmitModal();
+                // Reset fields
+                document.getElementById('post-author').value = '';
+                document.getElementById('post-title').value = '';
+                document.getElementById('post-summary').value = '';
+                document.getElementById('editor-content').innerHTML = '<p>Commencez à rédiger ici...</p>';
+                document.getElementById('editor-content').style.backgroundColor = '#ffffff';
+                document.getElementById('editor-content').classList.remove('columns-2');
+            }
         };
 
-        let allArticles = ARTICLES_DATA.articles;
-        let currentCategory = 'all';
+        // Supprimé l'ancien listener de soumission qui n'est plus compatible avec le wizard
 
-        // Load categories
-        const filterContainer = document.getElementById('category-filter');
-        ARTICLES_DATA.categories.forEach(cat => {
-            const btn = document.createElement('button');
-            btn.className = 'category-btn';
-            btn.textContent = cat.name;
-            btn.onclick = () => filterArticles(cat.id);
-            filterContainer.appendChild(btn);
-        });
-
-        function filterArticles(category) {
-            currentCategory = category;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.toggle('active',
-                    (category === 'all' && btn.textContent === 'Tous') ||
-                    btn.textContent === ARTICLES_DATA.categories.find(c => c.id === category)?.name
-                );
-            });
-
-            const filtered = category === 'all' ? allArticles : allArticles.filter(a => a.category === category);
-            renderArticles(filtered);
-        }
-
-        function renderArticles(articles) {
-            const grid = document.getElementById('articles-grid');
-            if (articles.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; color:#777;">Aucun article dans cette catégorie.</p>';
-                return;
-            }
-
-            const categoryColors = {
-                'ia': '#0A2463', 'agriculture': '#2D5A27', 'elevage': '#8B4513',
-                'restauration': '#8B1538', 'epicerie': '#D35400', 'commerce': '#34495E',
-                'economie': '#16A085', 'cas-tedsai': '#E67E22', 'pratique': '#27AE60',
-                'barometre': '#C0392B', 'interview': '#9B59B6'
-            };
-
-            const categoryIcons = {
-                'ia': 'fa-brain', 'agriculture': 'fa-seedling', 'elevage': 'fa-cow',
-                'restauration': 'fa-utensils', 'epicerie': 'fa-pepper-hot', 'commerce': 'fa-chart-line',
-                'economie': 'fa-coins', 'cas-tedsai': 'fa-lightbulb', 'pratique': 'fa-list-check',
-                'barometre': 'fa-chart-bar', 'interview': 'fa-microphone'
-            };
-
-            const categoryNames = {
-                'ia': 'IA', 'agriculture': 'Agriculture', 'elevage': 'Élevage',
-                'restauration': 'Restauration', 'epicerie': 'Épicerie', 'commerce': 'Commerce',
-                'economie': 'Économie', 'cas-tedsai': 'Cas TEDSAI', 'pratique': 'Guide',
-                'barometre': 'Baromètre', 'interview': 'Interview'
-            };
-
-            let html = '';
-            articles.forEach(article => {
-                const color = categoryColors[article.category] || '#333';
-                const icon = categoryIcons[article.category] || 'fa-file-alt';
-                const catName = categoryNames[article.category] || article.category;
-
-                html += `
-                    <div class="article-card">
-                        <div class="article-image" style="background: ${color};">
-                            <i class="fa-solid ${icon}"></i>
-                        </div>
-                        <div class="article-content">
-                            <span class="article-category" style="background: ${color};">${catName}</span>
-                            <h3 class="article-title">${article.title}</h3>
-                            <div class="article-meta">
-                                <span><i class="fa-solid fa-user"></i> ${article.author}</span>
-                                <span><i class="fa-solid fa-clock"></i> ${article.readTime}</span>
-                            </div>
-                            <p class="article-summary">${article.summary}</p>
-                        </div>
-                    </div>
-                `;
-            });
-
-            grid.innerHTML = html;
-        }
-
-        function subscribeNewsletter(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input').value;
-            const messages = JSON.parse(localStorage.getItem('tedsai_messages') || '[]');
-            messages.unshift({
-                id: 'newsletter_' + Date.now(),
-                name: 'Abonnement Newsletter',
-                email: email,
-                interest: 'observatoire',
-                message: 'Abonnement à la newsletter Observatoire',
-                date: new Date().toISOString()
-            });
-            localStorage.setItem('tedsai_messages', JSON.stringify(messages));
-            alert(i18n.t('observatory.newsletter_success', 'Thank you! You are subscribed to our newsletter.'));
-            e.target.reset();
-        }
-
-        // Initial load
-        renderArticles(allArticles);
+        Observatory.init();
     </script>
 </body>
 

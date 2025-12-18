@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ted-page-slug" content="pages/vitedia.html">
     <title>viTEDia - Restaurant Gastronomique Durable</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/mobile-nav.css">
     <style>
         :root {
             --color-vitedia-primary: #8B1E3F;
@@ -15,8 +16,8 @@
         }
 
         .hero-rest {
+            /* Default fallback */
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-            /* Placeholder Unsplash */
             background-size: cover;
             background-position: center;
             height: 70vh;
@@ -25,122 +26,6 @@
             justify-content: center;
             text-align: center;
             color: white;
-        }
-
-        .hero-rest h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .menu-section {
-            background-color: #F4EDE3;
-            /* Beige */
-            padding: var(--space-xl) 0;
-        }
-
-        .menu-card {
-            background: white;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: var(--space-lg);
-            border: 1px solid var(--color-vitedia-primary);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .menu-title {
-            text-align: center;
-            font-family: 'Playfair Display', serif;
-            color: var(--color-vitedia-primary);
-            border-bottom: 2px solid var(--color-vitedia-accent);
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .menu-category {
-            margin-bottom: 2rem;
-        }
-
-        .menu-category h3 {
-            color: var(--color-vitedia-primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px dashed #ddd;
-            padding-bottom: 0.5rem;
-        }
-
-        .item-info h4 {
-            margin-bottom: 0.2rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .item-desc {
-            font-size: 0.9rem;
-            color: #666;
-            font-style: italic;
-        }
-
-        .item-price {
-            font-weight: bold;
-            color: var(--color-vitedia-primary);
-        }
-
-        .badge-trace {
-            background-color: #E8F5E9;
-            color: #2E7D32;
-            font-size: 0.7rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 8px;
-            cursor: pointer;
-        }
-
-        .reservation-section {
-            padding: var(--space-xl) 0;
-            background-color: white;
-        }
-
-        .reservation-form {
-            max-width: 600px;
-            margin: 0 auto;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: inherit;
-        }
-
-        .btn-vitedia {
-            background-color: var(--color-vitedia-primary);
-            color: white;
-            border: none;
-        }
-
-        .btn-vitedia:hover {
-            background-color: #6b152e;
-            color: var(--color-vitedia-accent);
         }
     </style>
 </head>
@@ -152,40 +37,34 @@
         <div class="container navbar">
             <a href="../index.html" class="logo">
                 <img src="../assets/images/logos/Logo viTEDia.jpeg" alt="viTEDia Logo" style="height: 60px;">
-                <!-- Using viTEDia logo here -->
             </a>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span data-i18n="nav.home">Home</span></a>
-                <a href="solutions-ia.html" data-i18n="nav.solutions">AI Solutions</a>
-                <a href="vitedia.html" style="color: var(--color-vitedia-primary);" data-i18n="nav.vitedia">viTEDia</a>
-                <a href="garden.html" data-i18n="nav.garden">SelecTED Gardens</a>
-                <a href="observatoire.html" data-i18n="nav.observatory">Observatory</a>
-                <a href="contact.html" data-i18n="nav.contact">Contact</a>
-                <button id="lang-toggle-btn" onclick="toggleLanguage()"
-                    style="background-color: #2196F3 !important; color: white !important; border: 2px solid #1976D2; padding: 8px 16px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-language"></i> EN
-                </button>
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Home</span></a>
+                <a href="solutions-ia.html">AI Solutions</a>
+                <a href="vitedia.html" style="color: var(--color-vitedia-primary);">viTEDia</a>
+                <a href="garden.html">SelecTED Gardens</a>
+                <a href="observatoire.html">Observatory</a>
+                <a href="contact.html">Contact</a>
             </nav>
         </div>
     </header>
 
     <!-- Hero -->
-    <section class="hero-rest">
+    <section class="hero-rest" data-cms-id="Logo viTEDia.jpeg">
         <div class="container fade-in-up">
-            <h1 style="font-family: var(--font-accent); font-size: 4rem;" data-i18n="vitedia.hero.title">Bon. Propre.
+            <h1 style="font-family: var(--font-accent); font-size: 4rem;">Bon. Propre.
                 Rapide.</h1>
-            <p data-i18n="vitedia.hero.subtitle">Le goût de l'excellence, la traçabilité en plus.</p>
+            <p>Le goût de l'excellence, la traçabilité en plus.</p>
             <a href="#reservation" class="btn btn-primary"
-                style="background-color: var(--color-vitedia-primary); border: none;"
-                data-i18n="vitedia.hero.cta">Réserver une table</a>
+                style="background-color: var(--color-vitedia-primary); border: none;">Réserver une table</a>
         </div>
     </section>
 
     <!-- Concept Section -->
     <section class="container" style="padding: 4rem 0; text-align: center;">
-        <h2 style="color: var(--color-vitedia-primary); margin-bottom: 1rem;" data-i18n="vitedia.concept.title">Une
+        <h2 style="color: var(--color-vitedia-primary); margin-bottom: 1rem;">Une
             Odyssée Culinaire</h2>
-        <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem; color: #555;" data-i18n="vitedia.concept.desc">
+        <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem; color: #555;" data-cms-id="concept_text">
             viTEDia célèbre la diversité des dix régions du Cameroun. Nos chefs revisitent les
             classiques avec une touche moderne, en utilisant exclusivement des produits de notre jardin urbain.
             C'est la rencontre entre la tradition ancestrale et l'innovation de TEDSAI.
@@ -193,61 +72,94 @@
     </section>
 
     <!-- Menu -->
-    <section class="menu-section">
+    <section class="menu-section" style="padding: 5rem 0; background-color: #fdfdfd;">
         <div class="container">
-            <div class="menu-card">
-                <h2 class="menu-title" data-i18n="vitedia.menu.title">Menu du Jour</h2>
-                <!-- Dynamic Content Loading -->
-                <div id="dynamic-menu-container">
-                    <p style="text-align: center; color: #777;">Chargement du menu en cours... <i
-                            class="fa-solid fa-spinner fa-spin"></i></p>
+            <div class="menu-card"
+                style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); text-align: center; border-top: 5px solid var(--color-vitedia-primary);">
+                <div class="menu-card" style="text-align: center;">
+                    <h2 class="menu-title"
+                        style="margin-bottom: 2.5rem; color: var(--color-vitedia-primary); font-family: var(--font-accent); font-size: 2.5rem;">
+                        Menu du Jour</h2>
+                    <!-- Dynamic Content Loading -->
+                    <div id="dynamic-menu-container">
+                        <p style="text-align: center; color: #777;">Chargement du menu en cours... <i
+                                class="fa-solid fa-spinner fa-spin"></i></p>
+                    </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- Reservation -->
     <section class="reservation-section" id="reservation">
-        <div class="container">
-            <h2 style="text-align: center; color: var(--color-vitedia-primary); margin-bottom: 2rem;"
-                data-i18n="vitedia.reservation.title">Réserver une Table
-            </h2>
-            <form class="reservation-form">
-                <div class="form-group">
-                    <label data-i18n="vitedia.reservation.name">Nom Complet</label>
-                    <input type="text" placeholder="Votre nom"
-                        data-i18n-placeholder="vitedia.reservation.name_placeholder">
+        <div class="reservation-form-container"
+            style="max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: var(--shadow-card);">
+            <h3 style="text-align: center; color: var(--color-vitedia-primary); margin-bottom: 2rem;">Réserver une Table
+            </h3>
+
+            <form id="vitedia-reservation-form" onsubmit="handleReservationVitedia(event)">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nom Complet</label>
+                    <input type="text" id="res-name" required placeholder="Votre nom"
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label data-i18n="vitedia.reservation.date">Date</label>
-                        <input type="date">
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Téléphone</label>
+                    <input type="tel" id="res-phone" required placeholder="Ex: 6xxxxx"
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+
+                <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Date</label>
+                        <input type="date" id="res-date" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
                     </div>
-                    <div class="form-group">
-                        <label data-i18n="vitedia.reservation.time">Heure</label>
-                        <select>
-                            <option>12:00</option>
-                            <option>12:30</option>
-                            <option>13:00</option>
-                            <option>19:00</option>
-                            <option>19:30</option>
-                            <option>20:00</option>
+                    <div class="form-group" style="flex: 1;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Heure</label>
+                        <select id="res-time" required
+                            style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:30">13:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label data-i18n="vitedia.reservation.guests">Nombre de Personnes</label>
-                    <select>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5+</option>
+
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Couverts</label>
+                    <select id="res-people"
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                        <option value="1">1 Personne</option>
+                        <option value="2" selected>2 Personnes</option>
+                        <option value="3">3 Personnes</option>
+                        <option value="4">4 Personnes</option>
+                        <option value="5">5 Personnes</option>
+                        <option value="6">6 Personnes</option>
+                        <option value="plus">Plus de 6 (Nous vous rappellerons)</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-vitedia"
-                    style="width: 100%; padding: 12px; font-weight: bold; cursor: pointer;"
-                    data-i18n="vitedia.reservation.submit">Confirmer la
-                    Réservation</button>
+
+                <div class="form-group" style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Mode de Paiement
+                        (Acompte)</label>
+                    <select id="res-payment" required
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                        <option value="spot">Paiement sur place</option>
+                        <option value="momo">Mobile Money (Orange/MTN)</option>
+                    </select>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary"
+                        style="background-color: var(--color-vitedia-primary); border: none; padding: 12px 30px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: transform 0.2s;">
+                        Confirmer la Réservation
+                    </button>
+                </div>
             </form>
         </div>
     </section>
@@ -256,14 +168,32 @@
     <footer style="background: var(--color-vitedia-primary);">
         <div class="container footer-content">
             <div class="footer-col">
-                <h4 data-i18n="vitedia.footer.title">viTEDia</h4>
-                <p data-i18n="vitedia.footer.desc">Gastronomie Durable à Yaoundé.</p>
+                <h4>viTEDia</h4>
+                <p>Gastronomie Durable à Yaoundé.</p>
+                <div class="socials" style="margin-top: 1rem; display: flex; gap: 1rem; font-size: 1.5rem;">
+                    <a href="https://www.linkedin.com/in/tedsai-complex-a26b95397" target="_blank"
+                        rel="noopener noreferrer" aria-label="Notre page LinkedIn"
+                        style="color: white; transition: color 0.3s;"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/tedsai1385/" target="_blank" rel="noopener noreferrer"
+                        aria-label="Notre profil Instagram" style="color: white; transition: color 0.3s;"><i
+                            class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61584073655708" target="_blank"
+                        rel="noopener noreferrer" aria-label="Notre page Facebook"
+                        style="color: white; transition: color 0.3s;"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://x.com/Tedsai1385" target="_blank" rel="noopener noreferrer"
+                        aria-label="Notre compte X (Twitter)"
+                        style="color: white; transition: color 0.3s; font-weight: bold; font-family: Arial, sans-serif;">𝕏</a>
+                    <a href="https://www.youtube.com/@TEDSAIComplex" target="_blank" rel="noopener noreferrer"
+                        aria-label="Notre chaîne YouTube" style="color: white; transition: color 0.3s;"><i
+                            class="fa-brands fa-youtube"></i></a>
+                </div>
             </div>
+
             <div class="footer-col">
                 <h4>Contact</h4>
                 <ul>
-                    <li><a href="#">+237 000 000 000</a></li>
-                    <li><a href="#">contact@vitedia.cm</a></li>
+                    <li><a href="#">+237 683 121 654</a></li>
+                    <li><a href="#">vitediabytedsai@gmail.com</a></li>
                 </ul>
             </div>
         </div>
@@ -272,21 +202,45 @@
             <div style="margin-bottom: 1rem;">
                 <span
                     style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px;">
-                    <i class="fa-solid fa-robot"></i> <span data-i18n="vitedia.footer.powered_by">Logistique propulsée
+                    <i class="fa-solid fa-robot"></i> <span>Logistique propulsée
                         par</span> <strong>TEDSAI IA</strong>
                 </span>
             </div>
-        </div>
-        <p data-i18n="vitedia.footer.copyright">&copy; 2024 viTEDia Restaurant. Une entité du TEDSAI Complex.</p>
-        </div>
+            <p>&copy; 2024 viTEDia Restaurant. Une entité du TEDSAI Complex.</p>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="../assets/js/data-loader.js"></script>
+    <script src="../assets/js/core/db.js"></script>
+    <script src="../assets/js/core/auth.js"></script> <!-- Optional for frontend but good for consistency -->
+    <script src="../assets/js/core/api.js"></script>
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/ted-assistant.js"></script>
-    <script src="../assets/js/lang-toggle.js"></script>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Navigation mobile principale">
+        <div class="mobile-nav-items">
+            <a href="../index.html" class="mobile-nav-item" aria-label="Accueil">
+                <i class="fa-solid fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="solutions-ia.html" class="mobile-nav-item" aria-label="Solutions IA">
+                <i class="fa-solid fa-brain"></i>
+                <span>IA</span>
+            </a>
+            <a href="vitedia.html" class="mobile-nav-item active" aria-label="Restaurant viTEDia">
+                <i class="fa-solid fa-utensils"></i>
+                <span>viTEDia</span>
+            </a>
+            <a href="garden.html" class="mobile-nav-item" aria-label="SelecTED Gardens">
+                <i class="fa-solid fa-leaf"></i>
+                <span>Jardin</span>
+            </a>
+            <a href="observatoire.html" class="mobile-nav-item" aria-label="Observatoire">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>Obs</span>
+            </a>
+        </div>
+    </nav>
 </body>
 
 </html>

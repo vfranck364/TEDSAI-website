@@ -4,99 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ted-page-slug" content="pages/garden.html">
     <title>SelecTED Gardens - Agriculture Urbaine</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .language-switcher {
-            position: relative;
-            display: inline-block;
-            margin-left: 15px
-        }
+    <link rel="stylesheet" href="../assets/css/mobile-nav.css">
 
-        .lang-current {
-            background: var(--color-secondary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: .95rem;
-            transition: all .3s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
-            display: flex;
-            align-items: center;
-            gap: 8px
-        }
-
-        .lang-current:hover {
-            background: var(--color-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .2)
-        }
-
-        .lang-current i {
-            font-size: 1.1rem
-        }
-
-        .lang-dropdown {
-            display: none;
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: white;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
-            border-radius: 12px;
-            margin-top: 8px;
-            min-width: 220px;
-            z-index: 1000;
-            overflow: hidden;
-            animation: slideDown .3s ease
-        }
-
-        .lang-dropdown.active {
-            display: block
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        .lang-dropdown a {
-            display: block;
-            padding: 14px 18px;
-            color: #333;
-            text-decoration: none;
-            transition: background .2s;
-            cursor: pointer;
-            font-size: .95rem;
-            border-bottom: 1px solid #f0f0f0
-        }
-
-        .lang-dropdown a:last-child {
-            border-bottom: none
-        }
-
-        .lang-dropdown a:hover {
-            background: #f8f9fa;
-            color: var(--color-primary)
-        }
-
-        .lang-dropdown a.active-lang {
-            background: #e8f4f8;
-            color: var(--color-primary);
-            font-weight: 600
-        }
-    </style>
     <style>
         :root {
             --color-garden-primary: #2D5A27;
@@ -192,13 +105,13 @@
                 <img src="../assets/images/logos/Logo SelecTED Gardens.jpeg" alt="Garden Logo" style="height: 60px;">
             </a>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span data-i18n="nav.home">Home</span></a>
-                <a href="solutions-ia.html" data-i18n="nav.solutions">AI Solutions</a>
-                <a href="vitedia.html" data-i18n="nav.vitedia">viTEDia</a>
-                <a href="garden.html" style="color: var(--color-garden-primary);" data-i18n="nav.garden">SelecTED
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Home</span></a>
+                <a href="solutions-ia.html">AI Solutions</a>
+                <a href="vitedia.html">viTEDia</a>
+                <a href="garden.html" style="color: var(--color-garden-primary);">SelecTED
                     Gardens</a>
-                <a href="observatoire.html" data-i18n="nav.observatory">Observatory</a>
-                <a href="contact.html" data-i18n="nav.contact">Contact</a>
+                <a href="observatoire.html">Observatory</a>
+                <a href="contact.html">Contact</a>
             </nav>
         </div>
     </header>
@@ -206,8 +119,9 @@
     <!-- Hero -->
     <section class="hero-garden">
         <div class="container hero-content fade-in-up">
-            <h1>La Base Agricole du Complexe</h1>
-            <p style="font-size: 1.2rem;">Production Locale • Élevage • Traçabilité Totale</p>
+            <h1 data-cms-id="hero_title">La Base Agricole du Complexe</h1>
+            <p style="font-size: 1.2rem;" data-cms-id="hero_subtitle">Production Locale • Élevage • Traçabilité
+                Totale</p>
         </div>
     </section>
 
@@ -224,13 +138,12 @@
     <!-- Traceability -->
     <section class="traceability-section">
         <div class="container">
-            <h2>Suivez le Parcours de Votre Ingrédient</h2>
+            <h2 data-cms-id="trace_title">Suivez le Parcours de Votre Ingrédient</h2>
             <p style="margin-bottom: 2rem;">Entrez le code produit présent sur votre ticket ou étiquette.</p>
 
             <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                <input type="text" class="trace-input" placeholder="Ex: TOM-131224-B3">
-                <button class="btn-garden"
-                    onclick="alert('Traçabilité simulée : Tomate Cœur de Bœuf, Serre 2, Récoltée ce matin !')">Tracer</button>
+                <input type="text" id="trace-input-code" class="trace-input" placeholder="Ex: TOM-131224-B3">
+                <button id="btn-trace-submit" class="btn-garden">Tracer</button>
             </div>
 
             <div style="margin-top: 2rem;">
@@ -285,6 +198,23 @@
             <div class="footer-col">
                 <h4>SelecTED Gardens</h4>
                 <p>Cultiver mieux pour manger mieux.</p>
+                <div class="socials" style="margin-top: 1rem; display: flex; gap: 1rem; font-size: 1.5rem;">
+                    <a href="https://www.linkedin.com/in/tedsai-complex-a26b95397" target="_blank"
+                        rel="noopener noreferrer" aria-label="LinkedIn" style="color: white; transition: color 0.3s;"><i
+                            class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/tedsai1385/" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram" style="color: white; transition: color 0.3s;"><i
+                            class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61584073655708" target="_blank"
+                        rel="noopener noreferrer" aria-label="Facebook" style="color: white; transition: color 0.3s;"><i
+                            class="fa-brands fa-facebook"></i></a>
+                    <a href="https://x.com/Tedsai1385" target="_blank" rel="noopener noreferrer"
+                        aria-label="X (Twitter)"
+                        style="color: white; transition: color 0.3s; font-weight: bold; font-family: Arial, sans-serif;">𝕏</a>
+                    <a href="https://www.youtube.com/@TEDSAIComplex" target="_blank" rel="noopener noreferrer"
+                        aria-label="YouTube" style="color: white; transition: color 0.3s;"><i
+                            class="fa-brands fa-youtube"></i></a>
+                </div>
             </div>
             <div class="footer-col">
                 <h4>Contact</h4>
@@ -296,14 +226,17 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="../assets/js/core/db.js"></script>
+    <script src="../assets/js/core/auth.js"></script>
+    <script src="../assets/js/core/api.js"></script>
+
     <script src="../assets/js/data-loader.js"></script>
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/ted-assistant.js"></script>
     <script>
         // Specific override for Garden page specific "Tracer" button in section
-        const gardenBtn = document.querySelector('.btn-garden[onclick]');
+        const gardenBtn = document.querySelector('#btn-trace-submit'); // corrected selector
         if (gardenBtn) {
-            gardenBtn.removeAttribute('onclick');
             gardenBtn.addEventListener('click', () => {
                 document.getElementById('trace-result-view').style.display = 'block';
                 window.scrollTo({
@@ -313,8 +246,33 @@
             });
         }
     </script>
-    <script src="../assets/js/i18n.js"></script>
-    <script>function toggleLangDropdown(event) { event.stopPropagation(); document.getElementById("lang-dropdown").classList.toggle("active") } document.addEventListener("click", function (event) { const dropdown = document.getElementById("lang-dropdown"); const switcher = document.querySelector(".language-switcher"); if (dropdown</body ></body > !switcher.contains(event.target)){ dropdown.classList.remove("active") }}); window.switchLang = function (lang) { if (typeof i18n !== "undefined") { i18n.switchLanguage(lang) } const dropdown = document.getElementById("lang-dropdown"); if (dropdown) { dropdown.classList.remove("active") } document.querySelectorAll(".lang-dropdown a").forEach(link => { link.classList.toggle("active-lang", link.dataset.lang === lang) }) }; document.addEventListener("DOMContentLoaded", function () { setTimeout(() => { if (typeof i18n !== "undefined") { const currentLang = i18n.getCurrentLanguage(); document.querySelectorAll(".lang-dropdown a").forEach(link => { link.classList.toggle("active-lang", link.dataset.lang === currentLang) }) } }, 100) });</script>
+
+    <script src="/Users/dev-ai/Documents/TEDSAI-website/relative/path/fixer.js"></script>
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" aria-label="Navigation mobile principale">
+        <div class="mobile-nav-items">
+            <a href="../index.html" class="mobile-nav-item" aria-label="Accueil">
+                <i class="fa-solid fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="solutions-ia.html" class="mobile-nav-item" aria-label="Solutions IA">
+                <i class="fa-solid fa-brain"></i>
+                <span>IA</span>
+            </a>
+            <a href="vitedia.html" class="mobile-nav-item" aria-label="Restaurant viTEDia">
+                <i class="fa-solid fa-utensils"></i>
+                <span>viTEDia</span>
+            </a>
+            <a href="garden.html" class="mobile-nav-item active" aria-label="SelecTED Gardens">
+                <i class="fa-solid fa-leaf"></i>
+                <span>Jardin</span>
+            </a>
+            <a href="observatoire.html" class="mobile-nav-item" aria-label="Observatoire">
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>Obs</span>
+            </a>
+        </div>
+    </nav>
 </body>
 
 </html>

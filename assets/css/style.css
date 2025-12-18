@@ -52,22 +52,106 @@ body {
     color: var(--color-text-dark);
     background-color: var(--color-bg-light);
     line-height: 1.6;
+    font-size: 16px;
+    /* Base font size */
 }
 
-h1,
-h2,
-h3,
+/* Typographie standardisée et responsive */
+h1 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2.5rem;
+    /* 40px */
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2rem;
+    /* 32px */
+    line-height: 1.2;
+    margin-bottom: 0.875rem;
+}
+
+h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.5rem;
+    /* 24px */
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+}
+
 h4,
 h5,
 h6 {
     font-family: var(--font-heading);
     font-weight: 700;
+    line-height: 1.4;
+}
+
+p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Typographie mobile */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+        /* 32px */
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        /* 28px */
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        /* 20px */
+    }
 }
 
 a {
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
+}
+
+/* Amélioration accessibilité liens et focus global */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--color-secondary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(90, 169, 230, 0.3);
+    border-radius: 4px;
+    /* Un peu d'arrondi */
+    z-index: 10;
+}
+
+/* Fallback pour navigateurs anciens */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+}
+
+/* Mais on supprime l'outline souris si focus-visible est supporté */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+    outline: none;
 }
 
 img {
@@ -78,6 +162,40 @@ img {
 
 ul {
     list-style: none;
+}
+
+/* Support prefers-reduced-motion global */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Lazy loading images */
+img[data-src] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+img[data-src].loaded,
+img:not([data-src]) {
+    opacity: 1;
+}
+
+/* Optimisation connexion lente */
+.slow-connection * {
+    animation: none !important;
+    transition: none !important;
+}
+
+.slow-connection img[data-src] {
+    background: #f0f0f0;
 }
 
 /* Utilities */
@@ -126,6 +244,13 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+}
+
+/* Cacher header sur mobile */
+@media (max-width: 768px) {
+    header {
+        display: none;
+    }
 }
 
 .navbar {
@@ -727,4 +852,52 @@ footer {
         width: 100%;
         justify-content: center;
     }
+}
+
+/* viTEDia Menu Refinements */
+.menu-category-block {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.menu-grid {
+    margin-top: 1rem;
+}
+
+.dish-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dish-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dish-card:hover img {
+    transform: scale(1.08);
+}
+
+.dish-card .price-tag {
+    background: var(--color-vitedia-primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(139, 30, 63, 0.2);
+}
+
+.menu-category-block h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    width: 20%;
+    height: 3px;
+    background: var(--color-vitedia-accent);
+    border-radius: 2px;
 }
