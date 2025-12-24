@@ -26,20 +26,36 @@ const RestaurantAdmin = {
         }
 
         // Group by Category
-        const categories = { 'Entrée': [], 'Plat': [], 'Dessert': [], 'Boisson': [] };
+        const categories = { 'Entrée': [], 'Plat de Résistance': [], 'Dessert': [], 'Boisson': [], 'Autre': [] };
         menuItems.forEach(item => {
-            if (!categories[item.category]) categories[item.category] = [];
-            categories[item.category].push(item);
+            let cat = item.category || 'Plat de Résistance';
+            if (cat === 'Plat') cat = 'Plat de Résistance';
+            if (cat === 'Boisson / Autre') cat = 'Boisson';
+            if (cat === 'Boisson') cat = 'Boisson';
+
+            if (!categories[cat]) categories[cat] = [];
+            categories[cat].push(item);
         });
 
         let html = '';
+        const order = ['Entrée', 'Plat de Résistance', 'Dessert', 'Boisson', 'Autre'];
+        const displayTitles = {
+            'Entrée': 'Entrées',
+            'Plat de Résistance': 'Plats de Résistance',
+            'Dessert': 'Desserts',
+            'Boisson': 'Boissons',
+            'Autre': 'Autres'
+        };
 
-        for (const [catName, items] of Object.entries(categories)) {
-            if (items.length === 0) continue;
+        order.forEach(catName => {
+            const items = categories[catName];
+            if (items.length === 0) return;
 
             html += `
             <div class="menu-category-block">
-                <h4 style="border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 2rem; color: #4a5568;">${catName}s</h4>
+                <h4 style="border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; margin-top: 2rem; color: var(--color-vitedia-primary); font-family: var(--font-accent); text-transform: uppercase; letter-spacing: 1px;">
+                    ${displayTitles[catName]}
+                </h4>
                 <table class="admin-table">
                     <thead>
                         <tr>
@@ -57,8 +73,8 @@ const RestaurantAdmin = {
                     ? `<span class="badge badge-success">En ligne</span>`
                     : `<span class="badge badge-danger">Épuisé</span>`;
 
-                const imgDisplay = item.image
-                    ? `<img src="${item.image}" class="table-thumb">`
+                const imgDisplay = item.image && item.image.length > 10
+                    ? `<img src="${item.image}" class="table-thumb" onerror="this.src='../assets/images/placeholder_dish.jpg'">`
                     : `<div class="table-thumb-placeholder"><i class="fa-solid fa-image"></i></div>`;
 
                 html += `
@@ -68,7 +84,7 @@ const RestaurantAdmin = {
                                 <strong>${item.name}</strong>
                                 <p style="font-size: 0.85rem; color: #718096; margin-top: 2px;">${item.description || ''}</p>
                             </td>
-                            <td style="font-weight: 500;">${item.price} €</td>
+                            <td style="font-weight: 500;">${item.price.toLocaleString()} FCFA</td>
                             <td>${statusBadge}</td>
                             <td style="text-align: right;">
                                 <button class="btn-icon" onclick="RestaurantAdmin.toggleAvailability('${item.id}')" title="Changer Dispo">
@@ -85,7 +101,7 @@ const RestaurantAdmin = {
             });
 
             html += `</tbody></table></div>`;
-        }
+        });
 
         container.innerHTML = html;
         // Re-inject Add Button at top if needed, or rely on Header button
@@ -112,14 +128,15 @@ const RestaurantAdmin = {
                                 <label>Catégorie</label>
                                 <select name="category" class="form-control">
                                     <option value="Entrée" ${item?.category === 'Entrée' ? 'selected' : ''}>Entrée</option>
-                                    <option value="Plat" ${item?.category === 'Plat' ? 'selected' : ''}>Plat</option>
+                                    <option value="Plat de Résistance" ${item?.category === 'Plat de Résistance' || item?.category === 'Plat' ? 'selected' : ''}>Plat de Résistance</option>
                                     <option value="Dessert" ${item?.category === 'Dessert' ? 'selected' : ''}>Dessert</option>
-                                    <option value="Boisson" ${item?.category === 'Boisson' ? 'selected' : ''}>Boisson</option>
+                                    <option value="Boisson" ${item?.category === 'Boisson' || item?.category === 'Boisson / Autre' ? 'selected' : ''}>Boisson</option>
+                                    <option value="Autre" ${item?.category === 'Autre' ? 'selected' : ''}>Autre / Accompagnement</option>
                                 </select>
                             </div>
                             <div class="form-group half">
-                                <label>Prix (€)</label>
-                                <input type="number" step="0.5" name="price" class="form-control" required value="${item?.price || ''}">
+                                <label>Prix (FCFA)</label>
+                                <input type="number" step="100" name="price" class="form-control" required value="${item?.price || ''}">
                             </div>
                         </div>
 
@@ -162,35 +179,55 @@ const RestaurantAdmin = {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     document.getElementById('imageHidden').value = e.target.result;
-                    document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+                    document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" 
+                        onerror="this.src='../assets/images/placeholder_dish.jpg'"
+                        style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
                 };
                 reader.readAsDataURL(file);
             }
         });
 
         // 3. Handle Submit
-        document.getElementById('dish-form').addEventListener('submit', (e) => {
+        document.getElementById('dish-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const priceVal = parseFloat(formData.get('price'));
+            const btn = document.getElementById('btn-save');
+            const originalText = btn.textContent;
 
-            const data = {
-                name: formData.get('name'),
-                category: formData.get('category'),
-                price: isNaN(priceVal) ? 0 : priceVal,
-                description: formData.get('description'),
-                image: document.getElementById('imageHidden').value,
-                available: isEdit ? item.available : true
-            };
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Enregistrement...';
 
-            if (isEdit) {
-                TedDB.update('menu', id, data);
-            } else {
-                TedDB.insert('menu', data);
+                const formData = new FormData(e.target);
+                const priceVal = parseFloat(formData.get('price'));
+
+                const data = {
+                    name: formData.get('name'),
+                    category: formData.get('category'),
+                    price: isNaN(priceVal) ? 0 : priceVal,
+                    description: formData.get('description'),
+                    image: document.getElementById('imageHidden').value,
+                    available: isEdit ? item.available : true
+                };
+
+                console.log("Saving Item Data:", data);
+
+                if (isEdit) {
+                    TedDB.update('menu', id, data);
+                } else {
+                    TedDB.add('menu', data);
+                }
+
+                alert("✅ Plat enregistré avec succès !");
+                document.querySelector('.modal-overlay').remove();
+                this.renderMenuTable();
+
+            } catch (err) {
+                console.error("Save Error:", err);
+                alert("❌ Erreur lors de l'enregistrement. Vérifiez la console ou la taille de votre image.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
             }
-
-            document.querySelector('.modal-overlay').remove();
-            this.renderMenuTable();
         });
     },
 

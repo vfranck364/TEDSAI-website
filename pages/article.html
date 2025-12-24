@@ -237,7 +237,7 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <a href="../index.html"><img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="Logo"
+                <a href="../index.html"><img src="../assets/images/logos/tedsai_logo.jpg" alt="TEDSAI Logo"
                         style="height: 50px;"></a>
             </div>
             <nav class="nav-links">
@@ -255,8 +255,31 @@
         <!-- Loaded by JS -->
     </main>
 
-    <footer style="background: var(--color-primary); padding: 3rem 0; color: white;">
-        <div class="container" style="text-align:center;">
+    <footer style="background: var(--color-primary); padding: 4rem 0; color: white;">
+        <div class="container footer-content"
+            style="display: flex; justify-content: space-between; flex-wrap: wrap; text-align: left; gap: 3rem;">
+            <div class="footer-col" style="flex: 2; min-width: 300px;">
+                <h3 style="color: white; margin-bottom: 1.5rem; font-family: var(--font-accent);">L'Observatoire TEDSAI
+                </h3>
+                <p style="opacity: 0.8; line-height: 1.6;">Le pôle d'intelligence économique et technologique du
+                    Complexe TEDSAI. Analyses et veille pour l'émergence africaine.</p>
+            </div>
+            <div class="footer-col" style="flex: 1; min-width: 200px;">
+                <h4
+                    style="color: var(--color-secondary); margin-bottom: 1.2rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+                    Écosystème</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.8rem;"><a href="solutions-ia.html"
+                            style="color: white; text-decoration: none; opacity: 0.7;">TEDSAI IA</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="vitedia.html"
+                            style="color: white; text-decoration: none; opacity: 0.7;">viTEDia</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="garden.html"
+                            style="color: white; text-decoration: none; opacity: 0.7;">SelecTED Garden</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container"
+            style="text-align:center; margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; opacity: 0.6; font-size: 0.9rem;">
             <p>&copy; 2024 TEDSAI Complex. Tous droits réservés.</p>
         </div>
     </footer>
@@ -311,11 +334,15 @@
 
             render(post) {
                 const container = document.getElementById('article-page-content');
+                const categories = TedAPI.Blog.getCategories();
+                const catObj = categories.find(c => c.id === post.category);
+                const catName = catObj ? catObj.name : post.category;
+
                 container.innerHTML = `
                     <section class="article-hero">
                         <div class="article-container">
                             <div class="article-meta">
-                                <span><i class="fa-solid fa-tag"></i> ${post.category.toUpperCase()}</span>
+                                <span><i class="fa-solid fa-tag"></i> ${catName}</span>
                                 <span><i class="fa-solid fa-user"></i> ${post.author}</span>
                                 <span><i class="fa-solid fa-calendar"></i> ${new Date(post.date).toLocaleDateString('fr-FR')}</span>
                             </div>

@@ -34,8 +34,8 @@ function updateStats() {
     document.getElementById('stat-messages').textContent = messages.filter(m => !m.read).length;
 
     // Revenue Mensuel (Mock calculation based on resas)
-    const revenue = reservations.length * 25; // 25€ panier moyen fictif
-    document.getElementById('stat-revenue').textContent = revenue + ' €'; // ou FCFA
+    const revenue = reservations.length * 15000; // 15 000 FCFA panier moyen fictif
+    document.getElementById('stat-revenue').textContent = revenue.toLocaleString() + ' FCFA';
 }
 
 function renderReservationsTable() {

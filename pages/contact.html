@@ -89,14 +89,14 @@
     <header>
         <div class="container navbar">
             <a href="../index.html" class="logo">
-                <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="TEDSAI Logo">
+                <img src="../assets/images/logos/tedsai_logo.jpg" alt="TEDSAI Logo">
             </a>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Home</span></a>
-                <a href="solutions-ia.html">AI Solutions</a>
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Accueil</span></a>
+                <a href="solutions-ia.html">Solutions IA</a>
                 <a href="vitedia.html">viTEDia</a>
                 <a href="garden.html">SelecTED Gardens</a>
-                <a href="observatoire.html">Observatory</a>
+                <a href="observatoire.html">Observatoire</a>
                 <a href="contact.html" style="color: var(--color-primary);">Contact</a>
             </nav>
         </div>
@@ -104,23 +104,25 @@
 
     <section class="hero" style="background: var(--color-text-dark); height: 40vh; min-height: 300px;">
         <div class="hero-content container fade-in-up">
-            <h1>Contact Us</h1>
-            <p>We're here to help</p>
+            <h1>Contactez-nous</h1>
+            <p>Nous sommes là pour vous aider</p>
         </div>
     </section>
 
     <section class="container contact-grid">
         <div class="contact-form-container">
-            <h3>Send us a message</h3>
+            <h3>Envoyez-nous un message</h3>
             <form id="smart-form">
                 <div class="form-group">
-                    <label>I'm interested in:</label>
+                    <label>Je suis intéressé par :</label>
                     <select id="interest-select" onchange="updateForm()" name="interest">
                         <option value="">-- Select --</option>
-                        <option value="ia">AI Solution for my business</option>
-                        <option value="resto">viTEDia Reservation</option>
-                        <option value="garden">SelecTED Gardens Partnership</option>
-                        <option value="other">Other request</option>
+                        <option value="ia">Solution IA pour mon entreprise</option>
+                        <option value="resto">Réservation viTEDia</option>
+                        <option value="garden">Partenariat SelecTED Gardens</option>
+                        <option value="hiring">Recrutement / Jobs</option>
+                        <option value="press">Presse / Média</option>
+                        <option value="other">Autre demande</option>
                     </select>
                 </div>
 
@@ -152,26 +154,25 @@
                     </div>
                 </div>
 
-                <!-- Common Fields -->
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" name="name" placeholder="Your name" required>
+                    <label>Nom</label>
+                    <input type="text" name="name" placeholder="Votre nom" required>
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" placeholder="your@email.com" required>
+                    <input type="email" name="email" placeholder="votre@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>Message</label>
-                    <textarea name="message" rows="5" placeholder="Your message..." required></textarea>
+                    <textarea name="message" rows="5" placeholder="Votre message..." required></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Send Message</button>
+                <button type="submit" class="btn btn-primary">Envoyer le Message</button>
             </form>
         </div>
 
         <div class="contact-info">
-            <h3>Our Contact Info</h3>
+            <h3>Nos Coordonnées</h3>
             <div class="info-card">
                 <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
                 <div>
@@ -251,7 +252,21 @@
         </div>
     </nav>
 
-    <script src="../assets/js/data-loader.js"></script>
+    <!-- Scripts -->
+    <!-- Firebase SDKs (Compat for file:// support) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="../assets/js/core/firebase-config.js"></script>
+
+    <script src="../assets/js/core/db.js"></script>
+    <script src="../assets/js/core/auth.js"></script>
+    <script src="../assets/js/core/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/cms-loader.js"></script>
+    <script src="../assets/js/ted-assistant.js"></script>
     <script>
         function updateForm() {
             const select = document.getElementById('interest-select');
@@ -274,19 +289,46 @@
             data.id = 'msg_' + Date.now();
             data.date = new Date().toISOString();
 
-            // Save to "Mock Backend" via tedApi
-            if (typeof tedApi !== 'undefined') {
-                // Fetch existing messages first mock
-                const messages = JSON.parse(localStorage.getItem('tedsai_messages') || '[]');
-                messages.unshift(data); // Add new to top
-                tedApi.saveData('messages', messages);
+            // TODO: Remplacer cette URL par l'URL de votre déploiement Google Apps Script
+            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYmsZSmbj6qVx6WBOSSR7eYrS8eoae_XO0_1WWnKn5_A0WJmQy7ridb7bdxXYvp79Jvg/exec';
 
-                alert('Message envoyé avec succès ! Il est visible dans le Dashboard Admin.');
-                this.reset();
-            }
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Envoi en cours...';
+
+            // Envoyer vers Google Sheets
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Important pour Google Apps Script
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(() => {
+                    // Avec mode no-cors, on ne peut pas lire la réponse
+                    // On suppose que ça a fonctionné
+                    alert('✅ Message envoyé avec succès ! Nous vous contacterons bientôt.');
+                    this.reset();
+
+                    // Aussi sauvegarder localement pour le dashboard admin
+                    if (typeof TedAPI !== 'undefined') {
+                        const messages = JSON.parse(localStorage.getItem('tedsai_messages') || '[]');
+                        messages.unshift(data);
+                        TedAPI.saveData('messages', messages);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erreur:', error);
+                    alert('❌ Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter directement.');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                });
         });
     </script>
-    <script src="/Users/dev-ai/Documents/TEDSAI-website/relative/path/fixer.js"></script>
 </body>
 
 </html>

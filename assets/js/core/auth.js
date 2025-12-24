@@ -1,66 +1,109 @@
 /**
- * TEDSAI AUTHENTICATION & SECURITY
- * Gestion des sessions et RBAC
+ * TEDSAI AUTH CORE (Firebase Integration - Compat Mode)
  */
 
 const TedAuth = {
-    // Current User Session
-    getSession() {
-        const userStr = sessionStorage.getItem('tedsai_session');
-        return userStr ? JSON.parse(userStr) : null;
-    },
+    // --- LOGIN ---
+    async login(email, password) {
+        console.log(`🔐 TedAuth: Attempting login for ${email}`);
 
-    // Login
-    login(username, password) {
-        const user = TedDB.find('users', u => u.username === username);
-        
-        if (user && user.passwordHash === password) { // En prod: bcrypt verify
-            const session = {
-                id: user.id,
-                name: user.name,
-                role: user.role,
-                loginTime: Date.now()
+        if (!window.tedFirebase || !window.tedFirebase.loaded) {
+            return { success: false, message: "Erreur Système: Firebase non chargé (Compat)" };
+        }
+
+        const { auth, db } = window.tedFirebase; // Instances from compat SDK
+
+        try {
+            // 1. Firebase Auth Login (Compat Syntax)
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+
+            // 2. Fetch User Role from Firestore
+            let userData = {
+                uid: user.uid,
+                email: user.email,
+                name: user.displayName || email.split('@')[0],
+                role: 'visitor'
             };
-            sessionStorage.setItem('tedsai_session', JSON.stringify(session));
-            return { success: true, user: session };
+
+            try {
+                // Compat syntax: db.collection().doc().get()
+                const userDoc = await db.collection("users").doc(user.uid).get();
+
+                if (userDoc.exists) {
+                    const extraData = userDoc.data();
+                    userData = { ...userData, ...extraData };
+                } else {
+                    // Fallback & Auto-Promote Main User
+                    if (email.includes('admin') || email === 'tedsai1385@gmail.com') {
+                        userData.role = 'super_admin';
+                        // Auto-save to Firestore so next time it's clean
+                        db.collection("users").doc(user.uid).set(userData, { merge: true })
+                            .then(() => console.log("👑 User promoted to Super Admin in DB"));
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not fetch user role", err);
+            }
+
+            // 3. Create Session
+            this.setSession(userData);
+            return { success: true, user: userData };
+
+        } catch (error) {
+            console.error("Login Error:", error);
+            let msg = "Erreur de connexion";
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "Identifants incorrects";
+            if (error.code === 'auth/user-not-found') msg = "Utilisateur inconnu";
+
+            return { success: false, message: msg };
         }
-        return { success: false, message: "Identifiants invalides" };
     },
 
-    logout() {
-        sessionStorage.removeItem('tedsai_session');
-        window.location.href = '../admin/login.html';
+    // --- LOGOUT ---
+    async logout() {
+        if (window.tedFirebase && window.tedFirebase.auth) {
+            await window.tedFirebase.auth.signOut();
+        }
+        sessionStorage.removeItem('ted_session');
+        window.location.href = 'login.html';
     },
 
-    // RBAC Check
-    // Renvoie true si l'utilisateur a le droit d'accéder au module
-    canAccess(moduleIndex) {
-        const session = this.getSession();
-        if (!session) return false;
-
-        const role = session.role;
-        
-        if (role === 'super_admin') return true; // God mode
-
-        const permissions = {
-            'admin_resto': ['restaurant', 'menu', 'reservations'],
-            'admin_garden': ['garden', 'products', 'inventory'],
-            'admin_ia': ['ia', 'services', 'leads']
-        };
-
-        const allowed = permissions[role] || [];
-        return allowed.includes(moduleIndex);
+    // --- SESSION ---
+    setSession(user) {
+        sessionStorage.setItem('ted_session', JSON.stringify(user));
     },
 
-    // Middleware pour protéger les pages Admin
+    getCurrentUser() {
+        const session = sessionStorage.getItem('ted_session');
+        return session ? JSON.parse(session) : null;
+    },
+
     requireAuth() {
-        const session = this.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
-            return false;
+        const user = this.getCurrentUser();
+        if (!user && window.location.pathname.includes('/admin/')) {
+            if (!window.location.pathname.includes('login.html')) {
+                window.location.href = 'login.html';
+            }
+            return null;
         }
-        return session;
+        return user;
+    },
+
+    initListener() {
+        if (window.tedFirebase && window.tedFirebase.auth) {
+            // Compat syntax: auth.onAuthStateChanged(...)
+            window.tedFirebase.auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // console.log("Auth State: Logged In", user.email);
+                }
+            });
+        }
     }
 };
 
 window.TedAuth = TedAuth;
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => TedAuth.initListener(), 800);
+});

@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ted-page-slug" content="pages/solutions-ia.html">
     <title>Solutions IA - TEDSAI Complex</title>
+    <!-- Scripts -->
+    <!-- Firebase SDKs (Compat for file:// support) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="../assets/js/core/firebase-config.js"></script>
+
+    <script src="../assets/js/core/db.js"></script>
+    <script src="../assets/js/core/auth.js"></script>
+    <script src="../assets/js/core/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/cms-loader.js"></script>
+    <script src="../assets/js/ted-assistant.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/mobile-nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -108,15 +123,14 @@
     <header>
         <div class="container navbar">
             <a href="../index.html" class="logo">
-                <img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="TEDSAI Logo">
+                <img src="../assets/images/logos/tedsai_logo.jpg" alt="TEDSAI Logo">
             </a>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Home</span></a>
-                <a href="solutions-ia.html" style="color: var(--color-primary);">AI
-                    Solutions</a>
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Accueil</span></a>
+                <a href="solutions-ia.html" style="color: var(--color-primary);">Solutions IA</a>
                 <a href="vitedia.html">viTEDia</a>
                 <a href="garden.html">SelecTED Gardens</a>
-                <a href="observatoire.html">Observatory</a>
+                <a href="observatoire.html">Observatoire</a>
             </nav>
         </div>
     </header>
@@ -182,7 +196,7 @@
                     style="flex: 1; min-width: 300px; background: #f0f4f8; padding: var(--space-md); border-radius: 8px;">
                     <h4>Résultats Client</h4>
                     <p><strong>Supermarché Local :</strong></p>
-                    <p class="stats" style="color: var(--color-secondary);"><span>ROI :</span> <span>8 500€
+                    <p class="stats" style="color: var(--color-secondary);"><span>ROI :</span> <span>5 500 000 FCFA
                             économisés/an</span></p>
                     <p>Temps de gestion divisé par 8.</p>
                 </div>
@@ -246,7 +260,8 @@
             <div id="wizard-result" style="display: none; text-align: center;">
                 <i class="fa-solid fa-check-circle fa-3x" style="color: var(--color-active);"></i>
                 <h3 style="margin: 1rem 0;">Estimation Initiale</h3>
-                <p style="font-size: 2rem; font-weight: bold; color: var(--color-primary);" id="estimated-price">0€</p>
+                <p style="font-size: 2rem; font-weight: bold; color: var(--color-primary);" id="estimated-price">0 FCFA
+                </p>
                 <p style="color: #666; margin-bottom: 1.5rem;">Ceci est une
                     estimation brute. Contactez-nous pour
                     affiner.</p>
@@ -279,24 +294,25 @@
     </section>
     <div class="pricing-card">
         <h3>Starter</h3>
-        <div class="price">499€<span style="font-size: 1rem; color: #666;">/mois</span></div>
+        <div class="price">325 000 FCFA<span style="font-size: 1rem; color: #666;">/mois</span></div>
         <p>Pour PME 1-10 employés</p>
-        <a href="#" class="btn btn-secondary" style="margin-top: var(--space-md);">Choisir</a>
+        <a href="contact.html?plan=starter" class="btn btn-secondary" style="margin-top: var(--space-md);">Choisir</a>
     </div>
     <div class="pricing-card featured">
         <div
             style="background: var(--color-secondary); color: white; position: absolute; top: 0; left: 0; width: 100%; padding: 4px; font-size: 0.8rem; font-weight: bold;">
             POPULAIRE</div>
         <h3 style="margin-top: var(--space-am);">Business</h3>
-        <div class="price">1 299€<span style="font-size: 1rem; color: #666;">/mois</span></div>
+        <div class="price">850 000 FCFA<span style="font-size: 1rem; color: #666;">/mois</span></div>
         <p>Pour PME 10-50 employés</p>
-        <a href="#" class="btn btn-primary" style="margin-top: var(--space-md);">Choisir</a>
+        <a href="contact.html?plan=business" class="btn btn-primary" style="margin-top: var(--space-md);">Choisir</a>
     </div>
     <div class="pricing-card">
         <h3>Enterprise</h3>
         <div class="price">Sur Devis</div>
         <p>Pour +50 employés</p>
-        <a href="contact.html" class="btn btn-secondary" style="margin-top: var(--space-md);">Contacter</a>
+        <a href="contact.html?plan=enterprise" class="btn btn-secondary"
+            style="margin-top: var(--space-md);">Contacter</a>
     </div>
     </div>
     </section>
@@ -331,6 +347,8 @@
                 <ul>
                     <li><a href="../index.html">Accueil</a></li>
                     <li><a href="contact.html">Demander un Audit</a></li>
+                    <li><a href="contact.html?reason=hiring">Recrutement</a></li>
+                    <li><a href="contact.html?reason=press">Presse</a></li>
                 </ul>
             </div>
         </div>
@@ -374,12 +392,15 @@
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
-            document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.className += " active";
         }
+
+        // AI Playground Simulation
+        document.querySelector('#playground .btn-primary')?.addEventListener('click', () => {
+            alert("Analyse de la facture en cours... (Ceci est une simulation)");
+        });
     </script>
-    <script src="/Users/dev-ai/Documents/TEDSAI-website/relative/path/fixer.js"></script>
 </body>
 
 </html>

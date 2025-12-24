@@ -114,36 +114,57 @@
         </div>
     </div>
 
-    <!-- DB & Auth Core -->
-    <script src="../assets/js/core/db.js"></script>
-    <script src="../assets/js/core/auth.js"></script>
+    <!-- Firebase SDKs (Compat for file:// support) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- Config -->
+    <script src="../assets/js/core/firebase-config.js"></script>
+
+    <!-- Core Scripts -->
+    <script src="../assets/js/core/db.js" defer></script>
+    <script src="../assets/js/core/auth.js" defer></script>
 
     <script>
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
             const errorDiv = document.getElementById('error-msg');
             const btn = document.querySelector('button[type="submit"]');
 
-            const result = TedAuth.login(user, pass);
+            // Show loading state
+            const originalText = btn.innerText;
+            btn.innerText = "Connexion...";
+            btn.disabled = true;
 
-            if (result.success) {
-                // Animation de succès
-                errorDiv.style.display = 'block';
-                errorDiv.style.background = '#e8f5e9';
-                errorDiv.style.color = '#2e7d32';
-                errorDiv.innerText = "Connexion réussie. Redirection...";
-                btn.disabled = true;
+            try {
+                const result = await TedAuth.login(user, pass);
 
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 800);
-            } else {
-                errorDiv.style.display = 'block';
-                errorDiv.style.background = '#ffebee';
-                errorDiv.style.color = '#c62828';
-                errorDiv.innerText = result.message || "Erreur inconnue";
+                if (result.success) {
+                    // Animation de succès
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.background = '#e8f5e9';
+                    errorDiv.style.color = '#2e7d32';
+                    errorDiv.innerText = "Connexion réussie. Redirection...";
+
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 800);
+                } else {
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.background = '#ffebee';
+                    errorDiv.style.color = '#c62828';
+                    errorDiv.innerText = result.message || "Erreur inconnue";
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                }
+            } catch (err) {
+                console.error(err);
+                errorDiv.innerText = "Erreur inattendue via le script.";
+                btn.disabled = false;
+                btn.innerText = originalText;
             }
         });
     </script>

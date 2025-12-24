@@ -36,21 +36,21 @@
     <header>
         <div class="container navbar">
             <a href="../index.html" class="logo">
-                <img src="../assets/images/logos/Logo viTEDia.jpeg" alt="viTEDia Logo" style="height: 60px;">
+                <img src="../assets/images/logos/vitedia_logo.jpg" alt="viTEDia Logo" style="height: 60px;">
             </a>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Home</span></a>
-                <a href="solutions-ia.html">AI Solutions</a>
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Accueil</span></a>
+                <a href="solutions-ia.html">Solutions IA</a>
                 <a href="vitedia.html" style="color: var(--color-vitedia-primary);">viTEDia</a>
                 <a href="garden.html">SelecTED Gardens</a>
-                <a href="observatoire.html">Observatory</a>
+                <a href="observatoire.html">Observatoire</a>
                 <a href="contact.html">Contact</a>
             </nav>
         </div>
     </header>
 
     <!-- Hero -->
-    <section class="hero-rest" data-cms-id="Logo viTEDia.jpeg">
+    <section class="hero-rest" data-cms-id="hero_image">
         <div class="container fade-in-up">
             <h1 style="font-family: var(--font-accent); font-size: 4rem;">Bon. Propre.
                 Rapide.</h1>
@@ -75,7 +75,7 @@
     <section class="menu-section" style="padding: 5rem 0; background-color: #fdfdfd;">
         <div class="container">
             <div class="menu-card"
-                style="max-width: 800px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); text-align: center; border-top: 5px solid var(--color-vitedia-primary);">
+                style="max-width: 1100px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); text-align: center; border-top: 5px solid var(--color-vitedia-primary);">
                 <div class="menu-card" style="text-align: center;">
                     <h2 class="menu-title"
                         style="margin-bottom: 2.5rem; color: var(--color-vitedia-primary); font-family: var(--font-accent); font-size: 2.5rem;">
@@ -100,6 +100,12 @@
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nom Complet</label>
                     <input type="text" id="res-name" required placeholder="Votre nom"
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email (Optionnel)</label>
+                    <input type="email" id="res-email" placeholder="votre@email.com"
                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
                 </div>
 
@@ -143,6 +149,20 @@
                         <option value="6">6 Personnes</option>
                         <option value="plus">Plus de 6 (Nous vous rappellerons)</option>
                     </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Occasion Spéciale
+                        (Optionnel)</label>
+                    <input type="text" id="res-occasion" placeholder="Anniversaire, Rendez-vous pro..."
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Demandes Spéciales
+                        (Optionnel)</label>
+                    <textarea id="res-special" rows="3" placeholder="Allergies, table préférée..."
+                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;"></textarea>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 2rem;">
@@ -211,10 +231,19 @@
     </footer>
 
     <!-- Scripts -->
+    <!-- Firebase SDKs (Compat for file:// support) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="../assets/js/core/firebase-config.js"></script>
+
     <script src="../assets/js/core/db.js"></script>
-    <script src="../assets/js/core/auth.js"></script> <!-- Optional for frontend but good for consistency -->
+    <script src="../assets/js/core/auth.js"></script>
     <script src="../assets/js/core/api.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/cms-loader.js"></script>
     <script src="../assets/js/ted-assistant.js"></script>
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav" aria-label="Navigation mobile principale">

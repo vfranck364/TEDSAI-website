@@ -386,7 +386,7 @@
         <div class="carrefour-content">
             <!-- Logo -->
             <div class="carrefour-logo">
-                <img src="assets/images/logos/Logo TEDSAI.jpeg" alt="Logo TEDSAI">
+                <img src="assets/images/logos/tedsai_logo.jpg" alt="Logo TEDSAI">
             </div>
 
             <!-- Main Title -->
@@ -507,8 +507,8 @@
                 <h4>Contact</h4>
                 <ul>
                     <li><a href="pages/contact.html">Nous Contacter</a></li>
-                    <li><a href="#">Recrutement</a></li>
-                    <li><a href="#">Presse</a></li>
+                    <li><a href="pages/contact.html?reason=hiring">Recrutement</a></li>
+                    <li><a href="pages/contact.html?reason=press">Presse</a></li>
                 </ul>
             </div>
         </div>
@@ -547,8 +547,16 @@
     <!-- Scripts -->
     <script src="assets/js/core/db.js"></script>
     <script src="assets/js/core/auth.js"></script>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="assets/js/core/firebase-config.js"></script>
+
     <script src="assets/js/core/api.js"></script>
     <script src="assets/js/data-loader.js"></script>
+    <script src="assets/js/cms-loader.js"></script>
     <script src="assets/js/lang-toggle.js"></script>
     <script src="assets/js/backend-mock.js"></script>
     <script src="assets/js/main.js"></script>
@@ -569,7 +577,6 @@
             });
         });
     </script>
-    <script src="/Users/dev-ai/Documents/TEDSAI-website/relative/path/fixer.js"></script>
 </body>
 
 </html>

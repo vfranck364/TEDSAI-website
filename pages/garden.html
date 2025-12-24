@@ -102,15 +102,15 @@
     <header>
         <div class="container navbar">
             <a href="../index.html" class="logo">
-                <img src="../assets/images/logos/Logo SelecTED Gardens.jpeg" alt="Garden Logo" style="height: 60px;">
+                <img src="../assets/images/logos/garden_logo.jpg" alt="Garden Logo" style="height: 60px;">
             </a>
             <nav class="nav-links">
-                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Home</span></a>
-                <a href="solutions-ia.html">AI Solutions</a>
+                <a href="../index.html"><i class="fa-solid fa-home"></i> <span>Accueil</span></a>
+                <a href="solutions-ia.html">Solutions IA</a>
                 <a href="vitedia.html">viTEDia</a>
                 <a href="garden.html" style="color: var(--color-garden-primary);">SelecTED
                     Gardens</a>
-                <a href="observatoire.html">Observatory</a>
+                <a href="observatoire.html">Observatoire</a>
                 <a href="contact.html">Contact</a>
             </nav>
         </div>
@@ -147,7 +147,8 @@
             </div>
 
             <div style="margin-top: 2rem;">
-                <a href="#" style="color: var(--color-garden-primary); text-decoration: underline;"><i
+                <a href="javascript:alert('Ouverture de la caméra... (Simulation)')"
+                    style="color: var(--color-garden-primary); text-decoration: underline;"><i
                         class="fa-solid fa-qrcode"></i> Ou scannez un QR Code</a>
             </div>
         </div>
@@ -187,7 +188,8 @@
             </div>
 
             <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn btn-secondary">Télécharger Certificat</button>
+                <button class="btn btn-secondary" onclick="alert('Génération du PDF... (Simulation)')">Télécharger
+                    Certificat</button>
             </div>
         </div>
     </div>
@@ -217,21 +219,35 @@
                 </div>
             </div>
             <div class="footer-col">
+                <h4>Liens</h4>
+                <ul>
+                    <li><a href="contact.html?reason=hiring">Recrutement</a></li>
+                    <li><a href="contact.html?reason=press">Presse</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
                 <h4>Contact</h4>
                 <ul>
-                    <li><a href="#">partenariat@garden.cm</a></li>
+                    <li><a href="mailto:partenariat@garden.cm">partenariat@garden.cm</a></li>
                 </ul>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
+    <!-- Firebase SDKs (Compat for file:// support) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="../assets/js/core/firebase-config.js"></script>
+
     <script src="../assets/js/core/db.js"></script>
     <script src="../assets/js/core/auth.js"></script>
     <script src="../assets/js/core/api.js"></script>
-
-    <script src="../assets/js/data-loader.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/cms-loader.js"></script>
     <script src="../assets/js/ted-assistant.js"></script>
     <script>
         // Specific override for Garden page specific "Tracer" button in section
@@ -246,8 +262,6 @@
             });
         }
     </script>
-
-    <script src="/Users/dev-ai/Documents/TEDSAI-website/relative/path/fixer.js"></script>
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav" aria-label="Navigation mobile principale">
         <div class="mobile-nav-items">

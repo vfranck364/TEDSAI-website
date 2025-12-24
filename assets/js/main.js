@@ -33,10 +33,13 @@ function initMobileNav() {
 window.handleReservationVitedia = function (e) {
     e.preventDefault();
     const name = document.getElementById('res-name').value;
+    const email = document.getElementById('res-email').value; // Nouveau champ
     const phone = document.getElementById('res-phone').value;
     const date = document.getElementById('res-date').value;
     const time = document.getElementById('res-time').value;
     const people = document.getElementById('res-people').value;
+    const occasion = document.getElementById('res-occasion').value; // Nouveau champ
+    const specialRequests = document.getElementById('res-special').value; // Nouveau champ
     const payment = document.getElementById('res-payment').value;
 
     if (!name || !date || !time || !phone) {
@@ -47,7 +50,7 @@ window.handleReservationVitedia = function (e) {
     const btn = e.target.querySelector('button[type="submit"]');
     const originalText = btn.innerText;
     btn.disabled = true;
-    btn.innerText = "Vérification...";
+    btn.innerText = "Traitement de la réservation...";
 
     // SIMULATION MOBILE MONEY
     if (payment === 'momo') {
@@ -59,22 +62,49 @@ window.handleReservationVitedia = function (e) {
         }
     }
 
-    // Call API
-    setTimeout(() => {
-        const result = TedAPI.Restaurant.makeReservation({
-            name, phone, date, time, people, paymentMethod: payment
-        });
+    // Google Sheets Integration
+    const data = {
+        name, email, phone, date, time, people, payment, occasion, specialRequests,
+        id: 'res_' + Date.now(),
+        dateCreated: new Date().toISOString()
+    };
 
-        if (result.success) {
-            alert(`✅ Succès !\n\n${result.message}\n\nAcompte: ${payment === 'momo' ? 'Payé (Simulé)' : 'À régler sur place'}`);
+    // TODO: Remplacer par l'URL de votre déploiement Google Apps Script (voir guide_google_sheets_reservations.md)
+    const GOOGLE_APPS_SCRIPT_RESERVATIONS_URL = 'https://script.google.com/macros/s/AKfycbw4dwneZ5fwG7YvPVSZJcwODby3DiDobXAlgQi8r9Rcf0GmxyqzN207QFFIV_3LcW8b/exec';
+
+    // 1. Send to Google Sheets
+    fetch(GOOGLE_APPS_SCRIPT_RESERVATIONS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+        .then(() => {
+            // 2. Save locally for Admin Dashboard (Parallel)
+            const result = TedAPI.Restaurant.makeReservation({
+                name, phone, date, time, people, paymentMethod: payment
+            });
+
+            if (result.success) {
+                alert(`✅ Réservation confirmée !\n\n${result.message}\n\nAcompte: ${payment === 'momo' ? 'Payé (Simulé)' : 'À régler sur place'}`);
+                e.target.reset();
+            } else {
+                alert(`❌ Erreur locale: ${result.message}`);
+            }
+        })
+        .catch((error) => {
+            console.error('Erreur Google Sheets:', error);
+            // Fallback: Save locally anyway
+            const result = TedAPI.Restaurant.makeReservation({
+                name, phone, date, time, people, paymentMethod: payment
+            });
+            alert('✅ Réservation enregistrée (Mode local uniquement). Veuillez nous contacter si vous ne recevez pas de confirmation.');
             e.target.reset();
-        } else {
-            alert(`❌ Erreur: ${result.message}`);
-        }
-
-        btn.disabled = false;
-        btn.innerText = originalText;
-    }, 1000);
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerText = originalText;
+        });
 };
 
 /**
@@ -82,15 +112,9 @@ window.handleReservationVitedia = function (e) {
  * Fetches data from "Mock Backend" and renders it.
  */
 async function loadDynamicContent() {
-    // 1. Render viTEDia Munu
-    const menuContainer = document.getElementById('dynamic-menu-container');
-    if (menuContainer && typeof tedApi !== 'undefined') {
-        const menuData = await tedApi.fetchData('menu');
-        if (menuData) {
-            renderMenu(menuContainer, menuData);
-        } else {
-            menuContainer.innerHTML = '<p class="error">Erreur de chargement du menu.</p>';
-        }
+    // 1. Render viTEDia Menu
+    if (document.getElementById('dynamic-menu-container')) {
+        loadVitediaMenu();
     }
 
     // 2. Render Garden Production
@@ -101,8 +125,8 @@ async function loadDynamicContent() {
     }
     // 3. Render IA Services
     const iaContainer = document.getElementById('dynamic-services-container');
-    if (iaContainer && typeof tedApi !== 'undefined') {
-        const iaData = await tedApi.fetchData('services');
+    if (iaContainer && typeof TedAPI !== 'undefined') {
+        const iaData = await TedAPI.fetchData('services');
         if (iaData) {
             renderServices(iaContainer, iaData);
         }
@@ -113,6 +137,11 @@ async function loadDynamicContent() {
         initQuoteWizard();
     }
 }
+
+// 🔄 ADDED: Listen for DB changes to re-render dynamic content
+window.addEventListener('ted-db-changed-menu', () => { if (document.getElementById('dynamic-menu-container')) loadVitediaMenu(); });
+window.addEventListener('ted-db-changed-garden_products', () => { if (document.getElementById('dynamic-garden-container')) loadGardenProducts(); });
+window.addEventListener('ted-db-changed-ia_services', () => { if (document.getElementById('dynamic-services-container')) loadDynamicContent(); });
 
 // --- QUOTE WIZARD LOGIC ---
 let quizData = null;
@@ -174,9 +203,9 @@ function showWizardResult() {
 
     const timer = setInterval(() => {
         start += 50;
-        el.textContent = start + "€";
+        el.textContent = start + " FCFA";
         if (start >= end) {
-            el.textContent = end + "€ / mois"; // Monthly estimate
+            el.textContent = end + " FCFA / mois"; // Monthly estimate
             clearInterval(timer);
         }
     }, 10);
@@ -193,15 +222,30 @@ function restartWizard() {
 }
 
 function renderServices(container, data) {
-    if (!data.external || !data.external.services) return;
-    let html = '<div class="services-grid">';
-    data.external.services.forEach(service => {
+    if (!data || data.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:3rem; color:#718096; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e0;">
+                <i class="fa-solid fa-brain fa-2x" style="margin-bottom:1rem; opacity:0.5;"></i>
+                <p>Nos nouvelles solutions IA sont en cours de déploiement.<br><small>Revenez très bientôt !</small></p>
+            </div>`;
+        return;
+    }
+
+    let html = '<div class="services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">';
+    data.forEach(service => {
         html += `
-            <div class="service-card">
-                <i class="fa-solid ${service.icon} service-icon"></i>
-                <h3>${service.name}</h3>
-                <p>${service.summary}</p>
-                <a href="#demo" class="btn-text">Voir détails <i class="fa-solid fa-arrow-right"></i></a>
+            <div class="service-card" style="background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--color-primary); transition: transform 0.3s ease;">
+                <i class="${service.icon || 'fa-solid fa-robot'}" style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1.5rem; display: block;"></i>
+                <h3 style="margin-bottom: 1rem; color: #1e293b; font-weight: 700;">${service.name}</h3>
+                <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">${service.description || 'Solution d\'intelligence artificielle avancée pour votre entreprise.'}</p>
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="background: #f1f5f9; color: var(--color-primary); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                        ${service.price || 'Sur Devis'}
+                    </span>
+                </div>
+                <a href="contact.html?plan=${service.name.toLowerCase().replace(/\s+/g, '-')}" class="btn-text" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">
+                    En savoir plus <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i>
+                </a>
             </div>
         `;
     });
@@ -209,43 +253,17 @@ function renderServices(container, data) {
     container.innerHTML = html;
 }
 
-// --- 3. DYNAMIC CONTENT LOADING (FRONTEND CONNECTION) ---
-
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Dynamic Modules
-    if (document.getElementById('dynamic-menu-container')) loadVitediaMenu();
-    if (document.getElementById('dynamic-garden-container')) loadGardenProducts();
+    // 1. Dynamic Modules (Data Loading)
+    // Initial attempt (might be empty if DB not ready)
+    setTimeout(() => {
+        if (document.getElementById('dynamic-menu-container')) loadVitediaMenu();
+        if (document.getElementById('dynamic-garden-container')) loadGardenProducts();
+    }, 1000);
 
-    // 2. CMS Content Loading
-    loadPageContent();
+    // Note: CMS Content Loading is now handled by cms-loader.js separately
 });
 
-function loadPageContent() {
-    const slugMeta = document.querySelector('meta[name="ted-page-slug"]');
-    if (!slugMeta) return;
-
-    const slug = slugMeta.content;
-    if (!window.TedAPI || !window.TedAPI.Content) return;
-
-    const pageData = window.TedAPI.Content.getPage(slug);
-    if (!pageData || !pageData.blocks) return;
-
-    pageData.blocks.forEach(block => {
-        const el = document.querySelector(`[data-cms-id="${block.id}"]`);
-        if (el) {
-            if (block.type === 'image') {
-                if (el.tagName === 'IMG') {
-                    el.src = block.value;
-                } else {
-                    // Assume background image for other tags (div, section)
-                    el.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${block.value}')`;
-                }
-            } else {
-                el.innerText = block.value;
-            }
-        }
-    });
-}
 
 function loadGardenProducts() {
     const container = document.getElementById('dynamic-garden-container');
@@ -314,54 +332,100 @@ function loadVitediaMenu() {
     }
 
     // 2. Group by Category
-    const categories = { 'Entrée': [], 'Plat': [], 'Dessert': [], 'Boisson': [] };
+    const categories = {
+        'Entrée': [],
+        'Plat de Résistance': [],
+        'Dessert': [],
+        'Boisson': [],
+        'Autre': []
+    };
     menu.forEach(item => {
-        // Fuzzy match or exact match
-        let cat = item.category || 'Plat';
+        let cat = item.category || 'Plat de Résistance';
+        if (cat === 'Plat') cat = 'Plat de Résistance';
+        if (cat === 'Boisson / Autre') cat = 'Boisson';
+
         if (categories[cat]) {
             categories[cat].push(item);
         } else {
-            // Fallback
-            categories['Plat'].push(item);
+            // Fallback for unexpected or mixed categories
+            if (cat.toLowerCase().includes('boisson')) categories['Boisson'].push(item);
+            else if (cat.toLowerCase().includes('autre')) categories['Autre'].push(item);
+            else categories['Plat de Résistance'].push(item);
         }
     });
 
-    // 3. Keep specific order
-    const order = ['Entrée', 'Plat', 'Dessert', 'Boisson'];
-    let html = '';
+    // 3. Render Categorized Menu
+    const order = ['Entrée', 'Plat de Résistance', 'Dessert', 'Boisson', 'Autre'];
+    const icons = {
+        'Entrée': 'fa-leaf',
+        'Plat de Résistance': 'fa-utensils',
+        'Dessert': 'fa-ice-cream',
+        'Boisson': 'fa-glass-water',
+        'Autre': 'fa-plus'
+    };
+    const displayTitles = {
+        'Entrée': 'Entrées',
+        'Plat de Résistance': 'Plats de Résistance',
+        'Dessert': 'Desserts',
+        'Boisson': 'Boissons',
+        'Autre': 'Autres'
+    };
+
+    // Build Category Navigation
+    let navHtml = '<div class="menu-nav" style="display:flex; justify-content:center; gap:1rem; margin-bottom:4rem; flex-wrap:wrap;">';
+    order.forEach(cat => {
+        if (categories[cat].length > 0) {
+            navHtml += `<a href="#cat-${cat.replace(/\s+/g, '-').toLowerCase()}" 
+                onmouseover="this.style.background='var(--color-vitedia-primary)'; this.style.color='white'"
+                onmouseout="this.style.background='#f0f0f0'; this.style.color='#555'"
+                style="padding: 10px 20px; border-radius: 30px; background: #f0f0f0; color: #555; text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">${displayTitles[cat]}</a>`;
+        }
+    });
+    navHtml += '</div>';
+
+    let html = navHtml;
 
     order.forEach(catName => {
         const items = categories[catName];
         if (items.length > 0) {
+            const sectionId = `cat-${catName.replace(/\s+/g, '-').toLowerCase()}`;
             html += `
-            <div class="menu-category-block" style="margin-bottom:4rem; text-align: center;">
-                <h3 style="font-family: var(--font-accent); color: var(--color-vitedia-primary); font-size: 2.2rem; margin-bottom: 2rem; display: inline-block; position: relative; padding-bottom: 10px;">
-                    ${catName}s
-                    <span style="position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background: var(--color-vitedia-accent); border-radius: 2px;"></span>
-                </h3>
-                <div class="menu-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 350px)); justify-content: center; gap: 2.5rem;">
+            <div id="${sectionId}" class="menu-category-block" style="margin-bottom:6rem; scroll-margin-top: 100px;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 3rem;">
+                    <div style="height: 2px; background: #eee; flex: 1;"></div>
+                    <div style="text-align: center;">
+                        <i class="fa-solid ${icons[catName]}" style="color: var(--color-vitedia-primary); font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                        <h3 style="font-family: var(--font-accent); color: var(--color-vitedia-primary); font-size: 2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;">
+                            ${displayTitles[catName]}
+                        </h3>
+                    </div>
+                    <div style="height: 2px; background: #eee; flex: 1;"></div>
+                </div>
+                <div class="menu-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); justify-content: center; gap: 2rem;">
             `;
 
             items.forEach(item => {
                 const imageSrc = item.image && item.image.length > 10 ? item.image : '../assets/images/placeholder_dish.jpg';
-                const availableBadge = item.available ? '' : '<span style="position:absolute; top:10px; right:10px; background:red; color:white; padding:4px 8px; border-radius:4px; font-weight:bold; font-size:0.8rem;">ÉPUISÉ</span>';
-                const opacityStyle = item.available ? '' : 'opacity:0.7; grayscale:1;';
+                const availableBadge = item.available ? '' : '<span style="position:absolute; top:12px; right:12px; background:rgba(231, 76, 60, 0.9); color:white; padding:5px 12px; border-radius:20px; font-weight:bold; font-size:0.75rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">ÉPUISÉ</span>';
+                const opacityStyle = item.available ? '' : 'filter: grayscale(0.8); opacity:0.8;';
 
                 html += `
-                    <div class="dish-card" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; transition: transform 0.3s ease; position:relative; ${opacityStyle}">
+                    <div class="dish-card" style="background: white; border-radius: 16px; border: 1px solid #f0f0f0; box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow: hidden; transition: all 0.4s ease; position:relative; ${opacityStyle}">
                         ${availableBadge}
-                        <div style="height: 200px; overflow: hidden;">
-                            <img src="${imageSrc}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                        <div style="height: 220px; overflow: hidden; position: relative;">
+                            <img src="${imageSrc}" alt="${item.name}" 
+                                 onerror="this.src='../assets/images/placeholder_dish.jpg'"
+                                 style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
                         </div>
-                        <div style="padding: 1.5rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                <h4 style="margin: 0; font-size: 1.25rem; font-weight: 700;">${item.name}</h4>
-                                <span style="background: var(--color-vitedia-primary); color: white; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem;">
-                                    ${item.price} FCFA
+                        <div style="padding: 1.5rem; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                <h4 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: #333;">${item.name}</h4>
+                                <span style="color: var(--color-vitedia-primary); font-weight: 800; font-size: 1.1rem; white-space: nowrap; margin-left: 10px;">
+                                    ${item.price.toLocaleString()} <small style="font-size: 0.65rem; font-weight: 600;">FCFA</small>
                                 </span>
                             </div>
-                            <p style="color: #666; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0;">
-                                ${item.description || 'Une création savoureuse de nos chefs.'}
+                            <p style="color: #777; font-size: 0.9rem; line-height: 1.6; margin-bottom: 0; min-height: 2.8rem;">
+                                ${item.description || 'Une création savoureuse préparée avec soin par nos chefs sélectionnés.'}
                             </p>
                         </div>
                     </div>
@@ -375,67 +439,8 @@ function loadVitediaMenu() {
     container.innerHTML = html;
 }
 
-// Helper to Render Menu Categories (Legacy/Fallback)
-// Helper to Render Menu Categories
-function renderMenuCategory(containerId, title, items) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    let html = `
-        <div class="menu-category-block" style="margin-bottom:4rem; text-align: center;">
-            <h3 style="font-family: var(--font-accent); color: var(--color-vitedia-primary); font-size: 2.2rem; margin-bottom: 2rem; display: inline-block; position: relative; padding-bottom: 10px;">
-                ${title}
-                <span style="position: absolute; bottom: 0; left: 25%; width: 50%; height: 3px; background: var(--color-vitedia-accent); border-radius: 2px;"></span>
-            </h3>
-            <div class="menu-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 350px)); justify-content: center; gap: 2.5rem;">
-    `;
-
-    if (!items || items.length === 0) {
-        html += `<p style="color:#777; font-style:italic;">Aucun élément disponible pour le moment.</p>`;
-    } else {
-        items.forEach(item => {
-            const isAvailable = item.available !== false;
-            const badgeClass = item.traceable ? 'badge-trace' : '';
-            const opacityStyle = isAvailable ? '' : 'opacity:0.7; grayscale:1;';
-            const availabilityText = isAvailable ? '' : '<span style="color:red; font-weight:bold; font-size:0.8rem;">(ÉPUISÉ)</span>';
-
-            // Image Logic
-            const imageHtml = item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">` : '';
-
-            // Tags Logic
-            let tagsHtml = '';
-            if (item.tags) {
-                if (item.tags.includes('vegan')) tagsHtml += '<span style="background:#27ae60; color:white; padding:2px 6px; border-radius:4px; font-size:0.7rem; margin-right:5px;">VEGAN</span>';
-                if (item.tags.includes('spicy')) tagsHtml += '<span style="background:#e74c3c; color:white; padding:2px 6px; border-radius:4px; font-size:0.7rem;">PIMENTÉ</span>';
-            }
-
-            html += `
-            <div class="menu-item card ${badgeClass}" style="${opacityStyle} display:flex; flex-direction:column; padding:1.5rem; background:white; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
-                ${imageHtml}
-                <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:0.5rem;">
-                    <h4 style="margin:0; font-size:1.1rem; color:var(--color-primary);">${item.name} ${availabilityText}</h4>
-                    <span class="price" style="font-weight:bold; color:var(--color-secondary);">${item.price} FCFA</span>
-                </div>
-                <div style="margin-bottom:0.5rem;">${tagsHtml}</div>
-                <p style="font-size:0.9rem; color:#666; margin-bottom:1rem; flex-grow:1;">${item.description || ''}</p>
-                ${item.traceable ? '<div style="font-size:0.8rem; color: #27ae60;"><i class="fa-solid fa-leaf"></i> 100% Traçable</div>' : ''}
-            </div>
-            `;
-        });
-    }
-
-    html += '</div></div>'; // Close grid and block
-    container.insertAdjacentHTML('beforeend', html);
-}
-
-function renderMenu(container, data) {
-    container.innerHTML = ''; // Clear loading message
-
-    // Render Sections
-    renderMenuCategory('dynamic-menu-container', 'Entrées', data.starters);
-    renderMenuCategory('dynamic-menu-container', 'Plats de Résistance', data.mains);
-    renderMenuCategory('dynamic-menu-container', 'Desserts', data.desserts);
-}
+// 🔄 Removed redundant renderMenu/renderMenuCategory functions.
+// loadVitediaMenu is now the primary handler for the restaurant menu.
 
 function renderGarden(container, products) {
     if (!products || products.length === 0) {

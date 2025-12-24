@@ -146,7 +146,7 @@ const MediaAdmin = {
                 return;
             }
 
-            TedDB.insert('media_library', {
+            TedDB.add('media_library', {
                 name: name,
                 url: url,
                 type: 'image',

@@ -95,7 +95,7 @@ const IAAdmin = {
                             </div>
                             <div class="form-group half">
                                 <label>Tarification</label>
-                                <input type="text" name="price" class="form-control" value="${item?.price || ''}" placeholder="Ex: 500€/jour">
+                                <input type="text" name="price" class="form-control" value="${item?.price || ''}" placeholder="Ex: 350 000 FCFA">
                             </div>
                         </div>
 
@@ -137,7 +137,7 @@ const IAAdmin = {
             if (isEdit) {
                 TedDB.update('ia_services', id, data);
             } else {
-                TedDB.insert('ia_services', data);
+                TedDB.add('ia_services', data);
             }
             document.querySelector('.modal-overlay').remove();
             this.renderTable();

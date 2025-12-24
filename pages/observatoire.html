@@ -552,15 +552,15 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <a href="../index.html"><img src="../assets/images/logos/Logo TEDSAI.jpeg" alt="Logo"
+                <a href="../index.html"><img src="../assets/images/logos/tedsai_logo.jpg" alt="TEDSAI Logo"
                         style="height: 50px;"></a>
             </div>
             <nav class="nav-links">
                 <a href="../index.html">Accueil</a>
-                <a href="solutions-ia.html">Solutions IA</a>
+                <a href="solutions-ia.html">IA Solutions</a>
                 <a href="vitedia.html">viTEDia</a>
-                <a href="garden.html">SelecTED Gardens</a>
-                <a href="observatoire.html" style="font-weight: bold; color: var(--obs-primary);">L'Observatoire</a>
+                <a href="garden.html">SelecTED Garden</a>
+                <a href="observatoire.html" style="font-weight: bold; color: var(--obs-primary);">Observatoire</a>
                 <a href="contact.html" class="btn-cta">Contact</a>
             </nav>
         </div>
@@ -769,8 +769,54 @@
         </div>
     </div>
 
-    <footer style="background: var(--color-primary); padding: 3rem 0; color: white; margin-top: 4rem;">
-        <div class="container" style="text-align:center;">
+    <footer style="background: var(--color-primary); padding: 4rem 0; color: white; margin-top: 4rem;">
+        <div class="container footer-content"
+            style="display: flex; justify-content: space-between; flex-wrap: wrap; text-align: left; gap: 3rem;">
+            <div class="footer-col" style="flex: 2; min-width: 300px;">
+                <h3 style="color: white; margin-bottom: 1.5rem; font-family: var(--font-accent);">L'Observatoire TEDSAI
+                </h3>
+                <p style="opacity: 0.8; line-height: 1.6;">Le pôle d'intelligence économique et technologique du
+                    Complexe TEDSAI. Nous analysons les données pour éclairer vos décisions en Afrique.</p>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <a href="#" style="color: white; font-size: 1.2rem;"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" style="color: white; font-size: 1.2rem;"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col" style="flex: 1; min-width: 200px;">
+                <h4
+                    style="color: var(--color-secondary); margin-bottom: 1.2rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+                    Écosystème</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.8rem;"><a href="solutions-ia.html"
+                            style="color: white; text-decoration: none; opacity: 0.7; transition: 0.3s;">TEDSAI IA</a>
+                    </li>
+                    <li style="margin-bottom: 0.8rem;"><a href="vitedia.html"
+                            style="color: white; text-decoration: none; opacity: 0.7; transition: 0.3s;">Restaurant
+                            viTEDia</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="garden.html"
+                            style="color: white; text-decoration: none; opacity: 0.7; transition: 0.3s;">SelecTED
+                            Garden</a></li>
+                </ul>
+            </div>
+            <div class="footer-col" style="flex: 1; min-width: 200px;">
+                <h4
+                    style="color: var(--color-secondary); margin-bottom: 1.2rem; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">
+                    Ressources</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.8rem;"><a href="contact.html?reason=hiring"
+                            style="color: white; text-decoration: none; opacity: 0.7; transition: 0.3s;">Recrutement /
+                            Jobs</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="contact.html?reason=press"
+                            style="color: white; text-decoration: none; opacity: 0.7; transition: 0.3s;">Presse /
+                            Média</a></li>
+                    <li style="margin-bottom: 0.8rem;"><a href="contact.html"
+                            style="color: white; text-decoration: none; opacity: 0.7; transition: 0.3s;">Contact
+                            Direct</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container"
+            style="text-align:center; margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; opacity: 0.6; font-size: 0.9rem;">
             <p>&copy; 2024 TEDSAI Complex - Pôle Observatoire. Tous droits réservés.</p>
         </div>
     </footer>
@@ -790,6 +836,12 @@
                 const container = document.getElementById('category-pills');
                 const select = document.getElementById('modal-cat-select');
 
+                if (!container || !select) return;
+
+                // Clear existing (except "All" pill)
+                while (container.children.length > 1) container.removeChild(container.lastChild);
+                select.innerHTML = '<option value="" disabled selected>Choisir une catégorie...</option>';
+
                 cats.forEach(cat => {
                     const btn = document.createElement('button');
                     btn.className = 'pill';
@@ -806,17 +858,33 @@
 
             loadPosts(filter = 'all') {
                 const grid = document.getElementById('posts-grid');
+                const categories = TedAPI.Blog.getCategories();
                 let posts = TedAPI.Blog.getPosts();
 
                 if (filter !== 'all') {
                     posts = posts.filter(p => p.category === filter);
                 }
 
-                grid.innerHTML = posts.map(post => `
+                if (posts.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 5rem 0; color: #94a3b8;">
+                            <i class="fa-solid fa-newspaper fa-4x" style="margin-bottom: 1.5rem; opacity: 0.2;"></i>
+                            <h3>Aucune analyse disponible</h3>
+                            <p>Nous n'avons pas encore d'articles dans cette catégorie. Revenez bientôt !</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                grid.innerHTML = posts.map(post => {
+                    const catObj = categories.find(c => c.id === post.category);
+                    const catName = catObj ? catObj.name : post.category;
+
+                    return `
                     <article class="obs-card">
                         <div class="card-img" onclick="window.location.href='article.html?id=${post.id}'" style="cursor:pointer;">
-                            <img src="${post.image || '../assets/images/hero_bg.png'}" alt="${post.title}">
-                            <span class="category-badge">${post.category}</span>
+                            <img src="${post.image || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=800'}" alt="${post.title}">
+                            <span class="category-badge">${catName}</span>
                         </div>
                         <div class="card-body" onclick="window.location.href='article.html?id=${post.id}'" style="cursor:pointer;">
                             <div class="card-meta">
@@ -835,7 +903,8 @@
                             </button>
                         </div>
                     </article>
-                `).join('');
+                `;
+                }).join('');
             },
 
             filter(catId, btn) {
@@ -907,14 +976,21 @@
                 const file = input.files[0];
                 if (!file) return;
 
+                // Check size (Base64 is ~33% larger than binary, limit to 800KB roughly 1.1MB base64)
+                if (file.size > 800000) {
+                    alert("⚠️ Image trop lourde (Max 800 Ko recommandés). \n\nL'utilisation d'images trop lourdes ralentit le site et sature la mémoire du navigateur. Veuillez compresser votre image.");
+                    input.value = '';
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const base64 = e.target.result;
-                    const img = `<img src="${base64}" style="max-width:100%; border-radius:10px; margin: 1rem 0;">`;
+                    const img = `<img src="${base64}" style="max-width:100%; border-radius:10px; margin: 1rem 0;" onclick="Observatory.selectBlock(this)">`;
                     document.execCommand('insertHTML', false, img);
                 };
                 reader.readAsDataURL(file);
-                input.value = ''; // Reset for next use
+                input.value = '';
             },
 
             insertCallout() {
@@ -988,6 +1064,12 @@
                     return;
                 }
 
+                // Try to find the first image for the thumbnail
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                const firstImg = tempDiv.querySelector('img');
+                const thumbnail = firstImg ? firstImg.src : '';
+
                 const data = {
                     author: document.getElementById('post-author').value,
                     title: document.getElementById('post-title').value,
@@ -996,7 +1078,9 @@
                     content: content,
                     layout: isTwoColumns ? 'columns-2' : 'columns-1',
                     bgColor: bgColor || '#ffffff',
-                    image: ''
+                    image: thumbnail, // Capture first image as thumbnail
+                    date: new Date().toISOString(),
+                    likes: 0
                 };
 
                 TedAPI.Blog.submitGuestPost(data);
@@ -1007,15 +1091,34 @@
                 document.getElementById('post-author').value = '';
                 document.getElementById('post-title').value = '';
                 document.getElementById('post-summary').value = '';
-                document.getElementById('editor-content').innerHTML = '<p>Commencez à rédiger ici...</p>';
+                document.getElementById('editor-content').innerHTML = '<h1>Titre...</h1><p>Rédaction...</p>';
                 document.getElementById('editor-content').style.backgroundColor = '#ffffff';
                 document.getElementById('editor-content').classList.remove('columns-2');
+            },
+
+            updateToolbar() {
+                const commands = ['bold', 'italic', 'underline', 'strikeThrough', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'];
+                commands.forEach(cmd => {
+                    const btn = document.querySelector(`[onclick*="'${cmd}'"]`);
+                    if (btn) {
+                        if (document.queryCommandState(cmd)) btn.classList.add('active');
+                        else btn.classList.remove('active');
+                    }
+                });
             }
         };
 
-        // Supprimé l'ancien listener de soumission qui n'est plus compatible avec le wizard
+        // Listeners for toolbar feedback
+        document.getElementById('editor-content').addEventListener('keyup', () => Observatory.updateToolbar());
+        document.getElementById('editor-content').addEventListener('mouseup', () => Observatory.updateToolbar());
+        document.querySelector('.editor-toolbar').addEventListener('click', () => setTimeout(() => Observatory.updateToolbar(), 50));
 
-        Observatory.init();
+        // Initialization synced with Database
+        if (window.TedDB && window.TedDB.collections.blog_categories.length > 0) {
+            Observatory.init();
+        } else {
+            window.addEventListener('ted-db-ready', () => Observatory.init());
+        }
     </script>
 </body>
 

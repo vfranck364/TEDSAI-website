@@ -28,8 +28,8 @@ const TedAPI = {
                 return { success: false, message: "Désolé, ce créneau est complet." };
             }
 
-            // Save
-            const newRes = TedDB.insert('reservations', {
+            // Save to Firebase using 'add' (matching db.js)
+            const newRes = TedDB.add('reservations', {
                 ...details,
                 status: 'confirmed',
                 paymentStatus: details.paymentMethod === 'momo' ? 'paid_simulated' : 'pending'
@@ -41,9 +41,8 @@ const TedAPI = {
 
     // --- GARDEN MODULE ---
     Garden: {
-        getProducts: () => TedDB.findAll('garden_products'), // Return all, let frontend handle InStock/OutOfStock display
+        getProducts: () => TedDB.findAll('garden_products'),
         traceProduct: (code) => {
-            // Simulation logique traçabilité
             return {
                 product: "Tomate",
                 origin: "Serre B",
@@ -60,7 +59,8 @@ const TedAPI = {
 
     // --- CONTENT MODULE ---
     Content: {
-        getPage: (slug) => TedDB.find('content_pages', p => p.slug === slug)
+        getPage: (slug) => TedDB.find('content_pages', p => p.slug === slug),
+        getAllPages: () => TedDB.findAll('content_pages') // Added for cms-loader
     },
 
     // --- BLOG / OBSERVATOIRE MODULE ---
@@ -80,7 +80,7 @@ const TedAPI = {
         },
 
         addComment: (postId, commentData) => {
-            return TedDB.insert('blog_comments', {
+            return TedDB.add('blog_comments', {
                 postId,
                 author: commentData.author || 'Visiteur',
                 text: commentData.text,
@@ -89,13 +89,25 @@ const TedAPI = {
         },
 
         submitGuestPost: (postData) => {
-            return TedDB.insert('blog_posts', {
+            return TedDB.add('blog_posts', {
                 ...postData,
                 status: 'en_attente',
                 likes: 0,
                 date: new Date().toISOString()
             });
         }
+    },
+
+    // --- GENERIC COMPATIBILITY SHIM ---
+    fetchData: async (collection) => {
+        // Handle legacy calls with smart mapping
+        const mapping = {
+            'services': 'ia_services',
+            'garden': 'garden_products',
+            'menu': 'menu'
+        };
+        const target = mapping[collection] || collection;
+        return TedDB.findAll(target);
     }
 };
 

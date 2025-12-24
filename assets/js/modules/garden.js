@@ -163,7 +163,7 @@ const GardenAdmin = {
             if (isEdit) {
                 TedDB.update('garden_products', id, data);
             } else {
-                TedDB.insert('garden_products', data);
+                TedDB.add('garden_products', data);
             }
             document.querySelector('.modal-overlay').remove();
             this.renderTable();
